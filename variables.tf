@@ -29,69 +29,6 @@ variable "region" {
   description = "Region name"
 }
 
-# variable "platform_features" {
-#   type = object({
-#     platform_user_enabled     = bool
-#     platform_user_access_key  = optional(string)
-#     platform_user_secret_key  = optional(string)
-#     platform_iam_role_arn     = optional(string)
-#     platform_user_bucket_name = optional(string)
-
-#     # Azure specific
-#     container_registry = optional(object({
-#       admin_password = string
-#       admin_username = string
-#       login_server   = string
-#     }))
-#     blob_storage = optional(object({
-#       connection_string = string
-#       root_url          = string
-#     }))
-#     cluster_integration = optional(object({
-#       application_client_id = string
-#       tenant_id             = string
-#       client_secret         = string
-#     }))
-
-#     # GCP specific
-#     serviceaccount_key = optional(object({
-#       type                        = string
-#       project_id                  = string
-#       private_key_id              = string
-#       private_key                 = string
-#       client_email                = string
-#       client_id                   = string
-#       auth_uri                    = string
-#       token_uri                   = string
-#       auth_provider_x509_cert_url = string
-#       client_x509_cert_url        = string
-#       universe_domain             = string
-#     }))
-#     artifact_registry_url = optional(string)
-#     bucket_url            = optional(string)
-#   })
-#   description = "Platform features configuration"
-# }
-
-# variable "cloud_config" {
-#   type = object({
-#     # AWS specific
-#     s3_enabled                  = optional(bool)
-#     ecr_enabled                 = optional(bool)
-#     parameter_store_enabled     = optional(bool)
-#     secrets_manager_enabled     = optional(bool)
-#     cluster_integration_enabled = optional(bool)
-
-#     # Azure specific
-#     subscription_id = optional(string)
-#     resource_group  = optional(string)
-
-#     # GCP specific
-#     project_id = optional(string)
-#   })
-#   description = "Cloud provider specific configuration"
-# }
-
 
 variable "platform_user_enabled" {
   type        = bool
@@ -149,4 +86,10 @@ variable "cluster_integration_enabled" {
   type        = bool
   description = "Flag to enable/disable cluster integration"
   default     = false
+}
+
+variable "trigger_helm_update" {
+  type        = string
+  description = "Trigger Helm update"
+  default     = null
 }

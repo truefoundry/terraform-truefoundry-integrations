@@ -23,21 +23,42 @@ locals {
     secrets_manager_enabled     = var.secrets_manager_enabled
     cluster_integration_enabled = var.cluster_integration_enabled
   })
+
+  output_file = "${path.module}/outputs/cluster_output.txt"
+}
+
+# Create outputs directory if it doesn't exist
+resource "null_resource" "create_output_dir" {
+  provisioner "local-exec" {
+    command = "mkdir -p ${dirname(local.output_file)}"
+  }
 }
 
 resource "null_resource" "create_cluster" {
+  depends_on = [null_resource.create_output_dir]
+
   triggers = {
     cluster_name = var.cluster_name
     cluster_type = var.cluster_type
+    update_trigger = var.trigger_helm_update != null ? timestamp() : "initial"
+
   }
 
   provisioner "local-exec" {
-    command = "bash ${path.module}/scripts/create_cluster.sh '${var.control_plane_url}' '${var.api_key}' '${var.cluster_name}' '${var.cluster_type}' '${base64encode(local.provider_config)}'"
+    command = <<-EOT
+      bash ${path.module}/scripts/setup_truefoundry_cluster.sh \
+        '${var.control_plane_url}' \
+        '${var.api_key}' \
+        '${var.cluster_name}' \
+        '${var.cluster_type}' \
+        '${base64encode(local.provider_config)}' \
+        '${local.output_file}'
+    EOT
   }
 }
 
 data "local_file" "cluster_output" {
-  filename   = "${path.module}/cluster_output.txt"
+  filename   = local.output_file
   depends_on = [null_resource.create_cluster]
 }
 
