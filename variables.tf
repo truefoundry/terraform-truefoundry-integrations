@@ -89,7 +89,7 @@ variable "cluster_integration_enabled" {
 }
 
 variable "trigger_helm_update" {
-  type        = string
+  type        = bool
   description = "Trigger Helm update"
-  default     = null
+  default     = false
 }

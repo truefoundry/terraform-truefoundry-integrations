@@ -92,22 +92,22 @@ generate_cluster_manifest() {
     local env_name="$1"
     cat <<EOF
 {
-  "manifest": {
+    "manifest": {
     "name": "${CLUSTER_NAME}",
     "type": "cluster",
     "monitoring": {
-      "loki_url": "http://loki.loki.svc.cluster.local:3100",
-      "prometheus_url": "http://prometheus-operated.prometheus.svc.cluster.local:9090"
+        "loki_url": "http://loki.loki.svc.cluster.local:3100",
+        "prometheus_url": "http://prometheus-operated.prometheus.svc.cluster.local:9090"
     },
     "collaborators": [
-      {
+        {
         "role_id": "cluster-admin",
         "subject": "user:tfy-user@truefoundry.com"
-      }
+        }
     ],
     "cluster_type": "${CLUSTER_TYPE}",
     "environment_names": ["${env_name}"]
-  }
+    }
 }
 EOF
 }
@@ -186,15 +186,17 @@ write_outputs() {
     
     log_info "Writing outputs to ${OUTPUT_FILE}"
     
-    # Write to output file
+    # Use '::' as delimiter instead of '=' to handle base64 values
     cat > "${OUTPUT_FILE}" <<EOF
-CLUSTER_ID=${cluster_id}
-CLUSTER_TOKEN=${cluster_token}
-TENANT_NAME=${tenant_name}
+CLUSTER_ID::${cluster_id}
+CLUSTER_TOKEN::${cluster_token}
+TENANT_NAME::${tenant_name}
 EOF
 
     if [ -f "${OUTPUT_FILE}" ]; then
         log_info "Successfully wrote to ${OUTPUT_FILE}"
+        log_info "File contents:"
+        cat "${OUTPUT_FILE}" >&2
     else
         log_error "Failed to create ${OUTPUT_FILE}"
         exit 1
@@ -224,8 +226,6 @@ main() {
 
     # Write outputs to files
     write_outputs "${cluster_id}" "${cluster_token}" "${tenant_name}" 
-    ls -l cluster_output.txt
-    pwd
     log_info "Successfully created cluster with ID: ${cluster_id}"
 }
 

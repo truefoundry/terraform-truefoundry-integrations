@@ -38,9 +38,9 @@ resource "null_resource" "create_cluster" {
   depends_on = [null_resource.create_output_dir]
 
   triggers = {
-    cluster_name = var.cluster_name
-    cluster_type = var.cluster_type
-    update_trigger = var.trigger_helm_update != null ? timestamp() : "initial"
+    cluster_name        = var.cluster_name
+    cluster_type        = var.cluster_type
+    trigger_helm_update = var.trigger_helm_update != false ? timestamp() : "initial"
 
   }
 
@@ -63,7 +63,9 @@ data "local_file" "cluster_output" {
 }
 
 locals {
-  output_map = { for line in split("\n", data.local_file.cluster_output.content) :
-    split("=", line)[0] => split("=", line)[1] if length(split("=", line)) == 2
+  raw_content  = data.local_file.cluster_output.content
+  output_lines = compact(split("\n", local.raw_content))
+  output_map = { for line in local.output_lines :
+    split("::", line)[0] => split("::", line)[1] if length(split("::", line)) == 2
   }
 }

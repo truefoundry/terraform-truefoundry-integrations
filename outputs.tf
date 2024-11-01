@@ -1,16 +1,15 @@
 output "cluster_id" {
   description = "The ID of the created cluster"
-  value       = local.output_map["CLUSTER_ID"]
+  value       = try(local.output_map["CLUSTER_ID"], null)
 }
-
 
 output "tenant_name" {
   description = "The name of the tenant"
-  value       = local.output_map["TENANT_NAME"]
+  value       = try(local.output_map["TENANT_NAME"], null)
 }
 
 output "cluster_token" {
   description = "The token for the cluster"
-  value       = local.output_map["CLUSTER_TOKEN"]
+  value       = try(local.output_map["CLUSTER_TOKEN"], null)
   sensitive   = true
 }
