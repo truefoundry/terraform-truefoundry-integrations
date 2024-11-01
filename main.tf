@@ -24,18 +24,11 @@ locals {
     cluster_integration_enabled = var.cluster_integration_enabled
   })
 
-  output_file = "${path.module}/outputs/cluster_output.txt"
+  output_file = "${path.module}/cluster_output.txt"
 }
 
-# Create outputs directory if it doesn't exist
-resource "null_resource" "create_output_dir" {
-  provisioner "local-exec" {
-    command = "mkdir -p ${dirname(local.output_file)}"
-  }
-}
 
 resource "null_resource" "create_cluster" {
-  depends_on = [null_resource.create_output_dir]
 
   triggers = {
     cluster_name        = var.cluster_name
