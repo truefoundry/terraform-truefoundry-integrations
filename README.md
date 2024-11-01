@@ -45,7 +45,7 @@ No modules.
 | <a name="input_region"></a> [region](#input\_region) | Region name | `string` | n/a | yes |
 | <a name="input_s3_enabled"></a> [s3\_enabled](#input\_s3\_enabled) | Flag to enable/disable S3 integration | `bool` | `false` | no |
 | <a name="input_secrets_manager_enabled"></a> [secrets\_manager\_enabled](#input\_secrets\_manager\_enabled) | Flag to enable/disable Secrets Manager integration | `bool` | `false` | no |
-| <a name="input_trigger_helm_update"></a> [trigger\_helm\_update](#input\_trigger\_helm\_update) | Trigger Helm update | `string` | `null` | no |
+| <a name="input_trigger_helm_update"></a> [trigger\_helm\_update](#input\_trigger\_helm\_update) | Trigger Helm update | `bool` | `false` | no |
 
 ## Outputs
 
