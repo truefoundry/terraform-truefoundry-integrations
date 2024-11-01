@@ -9,6 +9,13 @@ CLUSTER_TYPE="$4"
 PROVIDER_CONFIG_BASE64="$5"
 OUTPUT_FILE="$6"
 
+# Validate required parameters
+[ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required"
+[ -z "${API_KEY}" ] && handle_error "API_KEY is required"
+[ -z "${CLUSTER_NAME}" ] && handle_error "CLUSTER_NAME is required"
+[ -z "${CLUSTER_TYPE}" ] && handle_error "CLUSTER_TYPE is required"
+[ -z "${OUTPUT_FILE}" ] && handle_error "OUTPUT_FILE is required"
+
 # Logging functions
 log_info() {
     echo "[INFO] $1" >&2
