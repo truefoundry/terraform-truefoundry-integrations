@@ -3,7 +3,7 @@ variable "control_plane_url" {
   description = "URL of the control plane"
 }
 
-variable "api_key" {
+variable "tfy_api_key" {
   type        = string
   description = "API key for authentication"
   sensitive   = true
@@ -19,66 +19,68 @@ variable "cluster_type" {
   description = "Type of cluster to create"
 }
 
-variable "account_id" {
+variable "cloud_account_id" {
   type        = string
-  description = "Cloud provider account ID"
+  description = "Cloud provider account ID/Project ID/Subscription ID"
 }
 
-variable "region" {
+variable "cloud_region" {
   type        = string
-  description = "Region name"
+  description = "Cloud provider region name"
 }
 
-
-variable "platform_user_enabled" {
+variable "service_account_enabled" {
   type        = bool
-  description = "Flag to enable/disable platform user"
+  description = "Flag to enable/disable service account/platform user"
 }
 
-variable "platform_user_access_key" {
+# Credentials
+variable "service_account_key_id" {
   type        = string
-  description = "AWS access key for the platform user"
+  description = "Cloud provider service account key ID/access key/client ID"
   sensitive   = true
 }
 
-variable "platform_user_secret_key" {
+variable "service_account_key_secret" {
   type        = string
-  description = "AWS secret key for the platform user"
+  description = "Cloud provider service account key secret/access secret/client secret"
   sensitive   = true
 }
 
-variable "platform_iam_role_arn" {
+variable "service_account_role_arn" {
   type        = string
-  description = "ARN of the IAM role for the platform"
+  description = "Cloud provider service account role ARN/role ID/role name"
 }
 
-
-variable "s3_enabled" {
+# Storage
+variable "object_store_enabled" {
   type        = bool
-  description = "Flag to enable/disable S3 integration"
+  description = "Flag to enable/disable object storage integration (S3/GCS/Blob Storage)"
   default     = false
 }
 
-variable "platform_user_bucket_name" {
+variable "object_store_bucket_name" {
   type        = string
-  description = "Name of the S3 bucket for platform user"
+  description = "Name of the object storage bucket"
 }
 
-variable "ecr_enabled" {
+# Container Registry
+variable "container_registry_enabled" {
   type        = bool
-  description = "Flag to enable/disable ECR integration"
+  description = "Flag to enable/disable container registry integration (ECR/GCR/ACR)"
   default     = false
 }
 
-variable "parameter_store_enabled" {
+# Secret Management
+variable "secret_store_enabled" {
   type        = bool
-  description = "Flag to enable/disable Parameter Store integration"
+  description = "Flag to enable/disable secret store integration (Parameter Store/Secret Manager/Key Vault)"
   default     = false
 }
 
-variable "secrets_manager_enabled" {
+variable "key_vault_enabled" {
   type        = bool
-  description = "Flag to enable/disable Secrets Manager integration"
+  description = "Flag to enable/disable key vault integration (Secrets Manager/KMS/Key Vault)"
   default     = false
 }
 
