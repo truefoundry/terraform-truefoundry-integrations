@@ -27,7 +27,6 @@ locals {
   output_file = "${path.module}/cluster_output.txt"
 }
 
-
 resource "null_resource" "create_cluster" {
 
   triggers = {
