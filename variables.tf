@@ -237,3 +237,10 @@ variable "resource_group_name" {
   description = "Name of the resource group"
   default     = null
 }
+
+variable "secrets_manager_enabled" {
+  description = "Flag to enable AWS Secrets Manager integration"
+  type        = bool
+  default     = false
+}
+

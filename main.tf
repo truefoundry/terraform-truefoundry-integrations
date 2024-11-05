@@ -27,10 +27,12 @@ locals {
     service_account_role_arn   = var.service_account_role_arn
 
     // Feature flags
-    object_store_enabled       = var.object_store_enabled
-    object_store_bucket_name   = var.object_store_bucket_name
-    container_registry_enabled = var.container_registry_enabled
-    secret_store_enabled       = var.secret_store_enabled
+    object_store_enabled        = var.object_store_enabled
+    object_store_bucket_name    = var.object_store_bucket_name
+    container_registry_enabled  = var.container_registry_enabled
+    secret_store_enabled        = var.secret_store_enabled
+    secrets_manager_enabled     = var.secrets_manager_enabled
+    cluster_integration_enabled = var.cluster_integration_enabled
   }
 
   # Azure provider configuration
