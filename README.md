@@ -50,6 +50,7 @@ No modules.
 | <a name="input_object_store_enabled"></a> [object\_store\_enabled](#input\_object\_store\_enabled) | Flag to enable/disable object storage integration (S3/GCS/Blob Storage) | `bool` | `false` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group | `string` | `null` | no |
 | <a name="input_secret_store_enabled"></a> [secret\_store\_enabled](#input\_secret\_store\_enabled) | Flag to enable/disable secret store integration | `bool` | `false` | no |
+| <a name="input_secrets_manager_enabled"></a> [secrets\_manager\_enabled](#input\_secrets\_manager\_enabled) | Flag to enable AWS Secrets Manager integration | `bool` | `false` | no |
 | <a name="input_service_account_enabled"></a> [service\_account\_enabled](#input\_service\_account\_enabled) | Flag to enable/disable service account/platform user | `bool` | `false` | no |
 | <a name="input_service_account_key_id"></a> [service\_account\_key\_id](#input\_service\_account\_key\_id) | Cloud provider service account key ID/access key/client ID | `string` | `null` | no |
 | <a name="input_service_account_key_secret"></a> [service\_account\_key\_secret](#input\_service\_account\_key\_secret) | Cloud provider service account key secret/access secret/client secret | `string` | `null` | no |
