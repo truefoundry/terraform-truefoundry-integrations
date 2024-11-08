@@ -1,18 +1,10 @@
 name: Generate terraform docs
 on:
-  pull_request:
-    branches:
-      - main
+  - pull_request
 
 jobs:
-  docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      - name: Render terraform docs and push changes back to PR
-        uses: terraform-docs/gh-actions@main
-        with:
-          git-push: 'true'
+  terraform-docs-generator:
+    name: Generate terraform docs
+    uses: truefoundry/github-workflows-public/.github/workflows/terraform-doc-generator.yml@v0.1.3
+    with:
+      commit_ref: ${{ github.event.pull_request.head.ref }}
