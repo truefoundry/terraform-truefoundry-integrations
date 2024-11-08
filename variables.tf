@@ -25,222 +25,246 @@ variable "cluster_type" {
 }
 
 # Common Optional Variables
-variable "cluster_integration_enabled" {
-  type        = bool
-  description = "Flag to enable/disable cluster integration"
-  default     = false
-}
-
 variable "trigger_helm_update" {
   type        = bool
   description = "Trigger Helm update"
   default     = false
 }
 
-# AWS Specific Variables
-variable "cloud_account_id" {
+# AWS Variables
+variable "aws_account_id" {
   type        = string
-  description = "Cloud provider account ID/Project ID/Subscription ID"
+  description = "AWS Account ID"
   default     = null
 }
 
-variable "cloud_region" {
+variable "aws_region" {
   type        = string
-  description = "Cloud provider region name"
+  description = "AWS Region name"
   default     = null
 }
 
-variable "service_account_enabled" {
+variable "aws_service_account_enabled" {
   type        = bool
-  description = "Flag to enable/disable service account/platform user"
+  description = "Flag to enable/disable AWS IAM service account"
   default     = false
 }
 
-variable "service_account_key_id" {
+variable "aws_access_key_id" {
   type        = string
-  description = "Cloud provider service account key ID/access key/client ID"
+  description = "AWS IAM Access Key ID"
   sensitive   = true
   default     = null
 }
 
-variable "service_account_key_secret" {
+variable "aws_secret_access_key" {
   type        = string
-  description = "Cloud provider service account key secret/access secret/client secret"
+  description = "AWS IAM Secret Access Key"
   sensitive   = true
   default     = null
 }
 
-variable "service_account_role_arn" {
+variable "aws_role_arn" {
   type        = string
-  description = "Cloud provider service account role ARN/role ID/role name"
+  description = "AWS IAM Role ARN"
   default     = null
 }
 
-variable "object_store_enabled" {
+variable "aws_s3_enabled" {
   type        = bool
-  description = "Flag to enable/disable object storage integration (S3/GCS/Blob Storage)"
+  description = "Flag to enable/disable AWS S3 integration"
   default     = false
 }
 
-variable "object_store_bucket_name" {
+variable "aws_s3_bucket_name" {
   type        = string
-  description = "Name of the object storage bucket"
+  description = "AWS S3 bucket name"
   default     = null
 }
 
-variable "container_registry_enabled" {
+variable "aws_ecr_enabled" {
   type        = bool
-  description = "Flag to enable/disable container registry integration (ECR/GCR/ACR)"
+  description = "Flag to enable/disable AWS ECR integration"
   default     = false
 }
 
-variable "secret_store_enabled" {
+variable "aws_parameter_store_enabled" {
   type        = bool
-  description = "Flag to enable/disable secret store integration"
+  description = "Flag to enable/disable AWS Parameter Store integration"
   default     = false
 }
 
-# Azure Specific Variables
-variable "container_registry_admin_password" {
+variable "aws_secrets_manager_enabled" {
+  type        = bool
+  description = "Flag to enable AWS Secrets Manager integration"
+  default     = false
+}
+
+variable "aws_cluster_integration_enabled" {
+  type        = bool
+  description = "Flag to enable/disable AWS EKS cluster integration"
+  default     = false
+}
+
+# Azure Variables
+variable "azure_subscription_id" {
   type        = string
-  description = "Admin password for Azure Container Registry"
+  description = "Azure Subscription ID"
+  default     = null
+}
+
+variable "azure_resource_group_name" {
+  type        = string
+  description = "Azure Resource Group name"
+  default     = null
+}
+
+variable "azure_cluster_integration_enabled" {
+  type        = bool
+  description = "Flag to enable/disable Azure AKS cluster integration"
+  default     = false
+}
+
+variable "azure_client_id" {
+  type        = string
+  description = "Azure Service Principal Client ID"
+  default     = null
+}
+
+variable "azure_client_secret" {
+  type        = string
+  description = "Azure Service Principal Client Secret"
   sensitive   = true
   default     = null
 }
 
-variable "container_registry_admin_username" {
+variable "azure_tenant_id" {
   type        = string
-  description = "Admin username for Azure Container Registry"
+  description = "Azure Tenant ID"
   default     = null
 }
 
-variable "container_registry_login_server" {
+variable "azure_acr_enabled" {
+  type        = bool
+  description = "Flag to enable/disable Azure Container Registry integration"
+  default     = false
+}
+
+variable "azure_acr_admin_password" {
   type        = string
-  description = "Login server URL for Azure Container Registry"
+  description = "Azure Container Registry admin password"
+  sensitive   = true
   default     = null
 }
 
-variable "blob_storage_enabled" {
+variable "azure_acr_admin_username" {
+  type        = string
+  description = "Azure Container Registry admin username"
+  default     = null
+}
+
+variable "azure_acr_login_server" {
+  type        = string
+  description = "Azure Container Registry login server URL"
+  default     = null
+}
+
+variable "azure_storage_enabled" {
   type        = bool
   description = "Flag to enable/disable Azure Blob Storage integration"
   default     = false
 }
 
-variable "blob_storage_connection_string" {
+variable "azure_storage_connection_string" {
   type        = string
-  description = "Connection string for Azure Blob Storage"
+  description = "Azure Storage Account connection string"
   sensitive   = true
   default     = null
 }
 
-variable "blob_storage_root_url" {
+variable "azure_storage_root_url" {
   type        = string
-  description = "Root URL for Azure Blob Storage"
+  description = "Azure Storage Account root URL"
   default     = null
 }
 
-# GCP Specific Variables
-variable "serviceaccount_key_type" {
+# GCP Variables
+variable "gcp_project_id" {
   type        = string
-  description = "Type of GCP service account key"
+  description = "GCP Project ID"
   default     = null
 }
 
-variable "serviceaccount_key_client_id" {
+variable "gcp_sa_key_type" {
   type        = string
-  description = "Client ID for GCP service account"
+  description = "GCP Service Account key type"
   default     = null
 }
 
-variable "serviceaccount_key_client_email" {
+variable "gcp_sa_client_id" {
   type        = string
-  description = "Client email for GCP service account"
+  description = "GCP Service Account client ID"
   default     = null
 }
 
-variable "serviceaccount_key_private_key" {
+variable "gcp_sa_client_email" {
   type        = string
-  description = "Private key for GCP service account"
+  description = "GCP Service Account client email"
+  default     = null
+}
+
+variable "gcp_sa_private_key" {
+  type        = string
+  description = "GCP Service Account private key"
   sensitive   = true
   default     = null
 }
 
-variable "serviceaccount_key_project_id" {
+variable "gcp_sa_project_id" {
   type        = string
-  description = "Project ID for GCP service account"
+  description = "GCP Service Account project ID"
   default     = null
 }
 
-variable "serviceaccount_key_auth_uri" {
+variable "gcp_sa_auth_uri" {
   type        = string
-  description = "Auth URI for GCP service account"
+  description = "GCP Service Account auth URI"
   default     = "https://accounts.google.com/o/oauth2/auth"
 }
 
-variable "serviceaccount_key_token_uri" {
+variable "gcp_sa_token_uri" {
   type        = string
-  description = "Token URI for GCP service account"
+  description = "GCP Service Account token URI"
   default     = "https://oauth2.googleapis.com/token"
 }
 
-variable "serviceaccount_key_auth_provider_x509_cert_url" {
+variable "gcp_sa_auth_provider_cert_url" {
   type        = string
-  description = "Auth provider x509 cert URL for GCP service account"
+  description = "GCP Service Account auth provider cert URL"
   default     = "https://www.googleapis.com/oauth2/v1/certs"
 }
 
-variable "serviceaccount_key_client_x509_cert_url" {
+variable "gcp_sa_client_cert_url" {
   type        = string
-  description = "Client x509 cert URL for GCP service account"
+  description = "GCP Service Account client cert URL"
   default     = null
 }
 
-variable "serviceaccount_key_universe_domain" {
+variable "gcp_sa_universe_domain" {
   type        = string
-  description = "Universe domain for GCP service account"
+  description = "GCP Service Account universe domain"
   default     = "googleapis.com"
 }
 
-variable "artifact_registry_url" {
+variable "gcp_artifact_registry_url" {
   type        = string
-  description = "URL for GCP Artifact Registry"
+  description = "GCP Artifact Registry URL"
   default     = null
 }
 
-variable "bucket_url" {
+variable "gcp_storage_bucket_url" {
   type        = string
-  description = "URL for GCP Storage bucket"
+  description = "GCP Storage bucket URL"
   default     = null
-}
-
-variable "cluster_integration_client_id" {
-  type        = string
-  description = "Client ID for Azure cluster integration"
-  default     = null
-}
-
-variable "cluster_integration_client_secret" {
-  type        = string
-  description = "Client secret for Azure cluster integration"
-  sensitive   = true
-  default     = null
-}
-
-variable "cluster_integration_tenant_id" {
-  type        = string
-  description = "Tenant ID for Azure cluster integration"
-  default     = null
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the resource group"
-  default     = null
-}
-
-variable "secrets_manager_enabled" {
-  description = "Flag to enable AWS Secrets Manager integration"
-  type        = bool
-  default     = false
 }
 
