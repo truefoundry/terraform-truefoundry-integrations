@@ -1,17 +1,8 @@
-# Create outputs directory if it doesn't exist
-resource "null_resource" "create_output_dir" {
-  provisioner "local-exec" {
-    command = "mkdir -p ${dirname(local.output_file)}"
-  }
-}
-
 resource "null_resource" "create_cluster" {
-  depends_on = [null_resource.create_output_dir]
-
   triggers = {
     cluster_name        = var.cluster_name
     cluster_type        = var.cluster_type
-    trigger_helm_update = var.trigger_helm_update != false ? timestamp() : "initial"
+    trigger_helm_update = var.trigger_helm_update ? timestamp() : "initial"
   }
 
   provisioner "local-exec" {
@@ -36,6 +27,7 @@ locals {
   raw_content  = data.local_file.cluster_output.content
   output_lines = compact(split("\n", local.raw_content))
   output_map = { for line in local.output_lines :
-    split("::", line)[0] => split("::", line)[1] if length(split("::", line)) == 2
+    split("::", line)[0] => split("::", line)[1]
+    if length(split("::", line)) == 2
   }
 }
