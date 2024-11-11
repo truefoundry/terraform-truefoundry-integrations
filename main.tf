@@ -1,38 +1,8 @@
-terraform {
-  required_providers {
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 3.0"
-    }
-  }
-}
+# Create outputs directory if it doesn't exist
+resource "null_resource" "create_output_dir" {
+  provisioner "local-exec" {
+    command = "mkdir -p ${dirname(local.output_file)}"
 
-locals {
-  template_file_map = {
-    "aws-eks"          = "${path.module}/templates/aws.json.tpl"
-    "azure-aks"        = "${path.module}/templates/azure.json.tpl"
-    "gcp-gke-standard" = "${path.module}/templates/gcp.json.tpl"
-  }
-
-  # AWS provider configuration
-  aws_config = {
-    cluster_name     = var.cluster_name
-    cloud_account_id = var.aws_account_id
-    cloud_region     = var.aws_region
-
-    // Auth related
-    service_account_enabled    = var.aws_service_account_enabled
-    service_account_key_id     = var.aws_access_key_id
-    service_account_key_secret = var.aws_secret_access_key
-    service_account_role_arn   = var.aws_role_arn
-
-    // Feature flags
-    object_store_enabled        = var.aws_s3_enabled
-    object_store_bucket_name    = var.aws_s3_bucket_name
-    container_registry_enabled  = var.aws_ecr_enabled
-    secret_store_enabled        = var.aws_parameter_store_enabled
-    secrets_manager_enabled     = var.aws_secrets_manager_enabled
-    cluster_integration_enabled = var.aws_cluster_integration_enabled
   }
 
   # Azure provider configuration
