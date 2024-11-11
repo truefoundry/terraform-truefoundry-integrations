@@ -24,7 +24,6 @@ No modules.
 | Name | Type |
 |------|------|
 | [null_resource.create_cluster](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.create_output_dir](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [local_file.cluster_output](https://registry.terraform.io/providers/hashicorp/local/latest/docs/data-sources/file) | data source |
 
 ## Inputs
