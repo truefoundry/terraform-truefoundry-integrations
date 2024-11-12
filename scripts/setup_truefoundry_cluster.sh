@@ -176,7 +176,6 @@ setup_provider_account() {
     
     log_info "Creating provider account..."
     local provider_manifest=$(echo "$PROVIDER_CONFIG_BASE64" | base64 -d)
-    echo "${provider_manifest}"
     
     make_request "PUT" \
         "${CONTROL_PLANE_URL}/api/svc/v1/provider-accounts/" \
