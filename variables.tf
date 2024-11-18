@@ -44,27 +44,27 @@ variable "aws_region" {
   default     = null
 }
 
-variable "aws_service_account_enabled" {
+variable "aws_platform_user_enabled" {
   type        = bool
   description = "Flag to enable AWS IAM service account"
   default     = false
 }
 
-variable "aws_access_key_id" {
+variable "aws_platform_user_access_key_id" {
   type        = string
   description = "AWS IAM Access Key ID"
   sensitive   = true
   default     = null
 }
 
-variable "aws_secret_access_key" {
+variable "aws_platform_user_secret_access_key" {
   type        = string
   description = "AWS IAM Secret Access Key"
   sensitive   = true
   default     = null
 }
 
-variable "aws_role_arn" {
+variable "aws_platform_user_role_arn" {
   type        = string
   description = "AWS IAM Role ARN"
   default     = null

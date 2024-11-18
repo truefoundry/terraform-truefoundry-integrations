@@ -12,10 +12,10 @@ locals {
     cloud_region     = var.aws_region
 
     // Auth related
-    service_account_enabled    = var.aws_service_account_enabled
-    service_account_key_id     = var.aws_access_key_id
-    service_account_key_secret = var.aws_secret_access_key
-    service_account_role_arn   = var.aws_role_arn
+    platform_user_enabled    = var.aws_platform_user_enabled
+    platform_user_key_id     = var.aws_platform_user_access_key_id
+    platform_user_key_secret = var.aws_platform_user_secret_access_key
+    platform_user_role_arn   = var.aws_platform_user_role_arn
 
     // Feature flags
     object_store_enabled        = var.aws_s3_enabled
