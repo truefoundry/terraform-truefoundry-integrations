@@ -30,7 +30,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_always_apply"></a> [always\_apply](#input\_always\_apply) | If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes | `bool` | `false` | no |
+| <a name="input_always_update"></a> [always\_update](#input\_always\_update) | If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes | `bool` | `false` | no |
 | <a name="input_aws_access_key_id"></a> [aws\_access\_key\_id](#input\_aws\_access\_key\_id) | AWS IAM Access Key ID | `string` | `null` | no |
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | AWS Account ID | `string` | `null` | no |
 | <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Flag to enable/disable AWS EKS cluster integration | `bool` | `false` | no |
