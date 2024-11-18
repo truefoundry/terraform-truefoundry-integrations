@@ -1,8 +1,8 @@
 resource "null_resource" "create_cluster" {
   triggers = {
-    cluster_name        = var.cluster_name
-    cluster_type        = var.cluster_type
-    trigger_helm_update = var.trigger_helm_update ? timestamp() : "initial"
+    cluster_name = var.cluster_name
+    cluster_type = var.cluster_type
+    always_apply = var.always_apply ? timestamp() : "initial"
   }
 
   provisioner "local-exec" {

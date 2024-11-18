@@ -25,9 +25,9 @@ variable "cluster_type" {
 }
 
 # Common Optional Variables
-variable "trigger_helm_update" {
+variable "always_apply" {
   type        = bool
-  description = "Trigger Helm update"
+  description = "Always apply changes even if there are no changes to the configuration"
   default     = false
 }
 
