@@ -46,7 +46,7 @@ variable "aws_region" {
 
 variable "aws_service_account_enabled" {
   type        = bool
-  description = "Flag to enable/disable AWS IAM service account"
+  description = "Flag to enable AWS IAM service account"
   default     = false
 }
 
@@ -72,7 +72,7 @@ variable "aws_role_arn" {
 
 variable "aws_s3_enabled" {
   type        = bool
-  description = "Flag to enable/disable AWS S3 integration"
+  description = "Flag to enable AWS S3 integration"
   default     = true
 }
 
@@ -84,13 +84,13 @@ variable "aws_s3_bucket_name" {
 
 variable "aws_ecr_enabled" {
   type        = bool
-  description = "Flag to enable/disable AWS ECR integration"
+  description = "Flag to enable AWS ECR integration"
   default     = true
 }
 
 variable "aws_parameter_store_enabled" {
   type        = bool
-  description = "Flag to enable/disable AWS Parameter Store integration"
+  description = "Flag to enable AWS Parameter Store integration"
   default     = true
 }
 
@@ -102,7 +102,7 @@ variable "aws_secrets_manager_enabled" {
 
 variable "aws_cluster_integration_enabled" {
   type        = bool
-  description = "Flag to enable/disable AWS EKS cluster integration"
+  description = "Flag to enable AWS EKS cluster integration"
   default     = true
 }
 
@@ -121,7 +121,7 @@ variable "azure_resource_group_name" {
 
 variable "azure_cluster_integration_enabled" {
   type        = bool
-  description = "Flag to enable/disable Azure AKS cluster integration"
+  description = "Flag to enable Azure AKS cluster integration"
   default     = false
 }
 
@@ -146,7 +146,7 @@ variable "azure_tenant_id" {
 
 variable "azure_acr_enabled" {
   type        = bool
-  description = "Flag to enable/disable Azure Container Registry integration"
+  description = "Flag to enable Azure Container Registry integration"
   default     = false
 }
 
@@ -171,7 +171,7 @@ variable "azure_acr_login_server" {
 
 variable "azure_storage_enabled" {
   type        = bool
-  description = "Flag to enable/disable Azure Blob Storage integration"
+  description = "Flag to enable Azure Blob Storage integration"
   default     = false
 }
 
