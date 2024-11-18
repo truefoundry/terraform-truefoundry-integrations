@@ -33,13 +33,13 @@ No modules.
 | <a name="input_always_update"></a> [always\_update](#input\_always\_update) | If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes | `bool` | `false` | no |
 | <a name="input_aws_access_key_id"></a> [aws\_access\_key\_id](#input\_aws\_access\_key\_id) | AWS IAM Access Key ID | `string` | `null` | no |
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | AWS Account ID | `string` | `null` | no |
-| <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Flag to enable/disable AWS EKS cluster integration | `bool` | `false` | no |
-| <a name="input_aws_ecr_enabled"></a> [aws\_ecr\_enabled](#input\_aws\_ecr\_enabled) | Flag to enable/disable AWS ECR integration | `bool` | `false` | no |
-| <a name="input_aws_parameter_store_enabled"></a> [aws\_parameter\_store\_enabled](#input\_aws\_parameter\_store\_enabled) | Flag to enable/disable AWS Parameter Store integration | `bool` | `false` | no |
+| <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Flag to enable/disable AWS EKS cluster integration | `bool` | `true` | no |
+| <a name="input_aws_ecr_enabled"></a> [aws\_ecr\_enabled](#input\_aws\_ecr\_enabled) | Flag to enable/disable AWS ECR integration | `bool` | `true` | no |
+| <a name="input_aws_parameter_store_enabled"></a> [aws\_parameter\_store\_enabled](#input\_aws\_parameter\_store\_enabled) | Flag to enable/disable AWS Parameter Store integration | `bool` | `true` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region name | `string` | `null` | no |
 | <a name="input_aws_role_arn"></a> [aws\_role\_arn](#input\_aws\_role\_arn) | AWS IAM Role ARN | `string` | `null` | no |
 | <a name="input_aws_s3_bucket_name"></a> [aws\_s3\_bucket\_name](#input\_aws\_s3\_bucket\_name) | AWS S3 bucket name | `string` | `null` | no |
-| <a name="input_aws_s3_enabled"></a> [aws\_s3\_enabled](#input\_aws\_s3\_enabled) | Flag to enable/disable AWS S3 integration | `bool` | `false` | no |
+| <a name="input_aws_s3_enabled"></a> [aws\_s3\_enabled](#input\_aws\_s3\_enabled) | Flag to enable/disable AWS S3 integration | `bool` | `true` | no |
 | <a name="input_aws_secret_access_key"></a> [aws\_secret\_access\_key](#input\_aws\_secret\_access\_key) | AWS IAM Secret Access Key | `string` | `null` | no |
 | <a name="input_aws_secrets_manager_enabled"></a> [aws\_secrets\_manager\_enabled](#input\_aws\_secrets\_manager\_enabled) | Flag to enable AWS Secrets Manager integration | `bool` | `false` | no |
 | <a name="input_aws_service_account_enabled"></a> [aws\_service\_account\_enabled](#input\_aws\_service\_account\_enabled) | Flag to enable/disable AWS IAM service account | `bool` | `false` | no |
