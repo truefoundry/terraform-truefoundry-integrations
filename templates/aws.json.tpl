@@ -3,13 +3,13 @@
     "name": "${cluster_name}",
     "type": "provider-account/aws",
     "auth_data": {
-    %{ if platform_user_enabled }
+    %{ if platform_features_user_enabled }
       "type": "access-key-based",
-      "access_key_id": "${platform_user_key_id}",
-      "secret_access_key": "${platform_user_key_secret}"
+      "access_key_id": "${platform_features_user_key_id}",
+      "secret_access_key": "${platform_features_user_key_secret}"
     %{ else }
       "type": "assumed-role-based",
-      "assumed_role_arn": "${platform_user_role_arn}"
+      "assumed_role_arn": "${platform_features_role_arn}"
     %{ endif }
     },
     "aws_account_id": "${cloud_account_id}",
