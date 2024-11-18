@@ -30,6 +30,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_always_update"></a> [always\_update](#input\_always\_update) | If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes | `bool` | `false` | no |
 | <a name="input_aws_access_key_id"></a> [aws\_access\_key\_id](#input\_aws\_access\_key\_id) | AWS IAM Access Key ID | `string` | `null` | no |
 | <a name="input_aws_account_id"></a> [aws\_account\_id](#input\_aws\_account\_id) | AWS Account ID | `string` | `null` | no |
 | <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Flag to enable/disable AWS EKS cluster integration | `bool` | `false` | no |
@@ -72,7 +73,6 @@ No modules.
 | <a name="input_gcp_sa_universe_domain"></a> [gcp\_sa\_universe\_domain](#input\_gcp\_sa\_universe\_domain) | GCP Service Account universe domain | `string` | `"googleapis.com"` | no |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | GCP Storage bucket URL | `string` | `null` | no |
 | <a name="input_tfy_api_key"></a> [tfy\_api\_key](#input\_tfy\_api\_key) | API key for authentication | `string` | n/a | yes |
-| <a name="input_trigger_helm_update"></a> [trigger\_helm\_update](#input\_trigger\_helm\_update) | Trigger Helm update | `bool` | `false` | no |
 
 ## Outputs
 

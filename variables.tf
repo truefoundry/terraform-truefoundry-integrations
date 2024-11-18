@@ -25,9 +25,9 @@ variable "cluster_type" {
 }
 
 # Common Optional Variables
-variable "trigger_helm_update" {
+variable "always_update" {
   type        = bool
-  description = "Trigger Helm update"
+  description = "If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes"
   default     = false
 }
 
