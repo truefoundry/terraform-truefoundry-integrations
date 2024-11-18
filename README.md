@@ -35,17 +35,14 @@ No modules.
 | <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Flag to enable AWS EKS cluster integration | `bool` | `true` | no |
 | <a name="input_aws_ecr_enabled"></a> [aws\_ecr\_enabled](#input\_aws\_ecr\_enabled) | Flag to enable AWS ECR integration | `bool` | `true` | no |
 | <a name="input_aws_parameter_store_enabled"></a> [aws\_parameter\_store\_enabled](#input\_aws\_parameter\_store\_enabled) | Flag to enable AWS Parameter Store integration | `bool` | `true` | no |
-| <a name="input_aws_platform_user_access_key_id"></a> [aws\_platform\_user\_access\_key\_id](#input\_aws\_platform\_user\_access\_key\_id) | AWS IAM Access Key ID | `string` | `null` | no |
-| <a name="input_aws_platform_user_enabled"></a> [aws\_platform\_user\_enabled](#input\_aws\_platform\_user\_enabled) | Flag to enable AWS IAM service account | `bool` | `false` | no |
-| <a name="input_aws_platform_user_role_arn"></a> [aws\_platform\_user\_role\_arn](#input\_aws\_platform\_user\_role\_arn) | AWS IAM Role ARN | `string` | `null` | no |
-| <a name="input_aws_platform_user_secret_access_key"></a> [aws\_platform\_user\_secret\_access\_key](#input\_aws\_platform\_user\_secret\_access\_key) | AWS IAM Secret Access Key | `string` | `null` | no |
-
+| <a name="input_aws_platform_features_role_arn"></a> [aws\_platform\_features\_role\_arn](#input\_aws\_platform\_features\_role\_arn) | AWS IAM Role ARN | `string` | `null` | no |
+| <a name="input_aws_platform_features_user_access_key_id"></a> [aws\_platform\_features\_user\_access\_key\_id](#input\_aws\_platform\_features\_user\_access\_key\_id) | AWS IAM Access Key ID | `string` | `null` | no |
+| <a name="input_aws_platform_features_user_enabled"></a> [aws\_platform\_features\_user\_enabled](#input\_aws\_platform\_features\_user\_enabled) | Flag to enable AWS IAM service account | `bool` | `false` | no |
+| <a name="input_aws_platform_features_user_secret_access_key"></a> [aws\_platform\_features\_user\_secret\_access\_key](#input\_aws\_platform\_features\_user\_secret\_access\_key) | AWS IAM Secret Access Key | `string` | `null` | no |
 | <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS Region name | `string` | `null` | no |
 | <a name="input_aws_s3_bucket_name"></a> [aws\_s3\_bucket\_name](#input\_aws\_s3\_bucket\_name) | AWS S3 bucket name | `string` | `null` | no |
 | <a name="input_aws_s3_enabled"></a> [aws\_s3\_enabled](#input\_aws\_s3\_enabled) | Flag to enable AWS S3 integration | `bool` | `true` | no |
-| <a name="input_aws_secret_access_key"></a> [aws\_secret\_access\_key](#input\_aws\_secret\_access\_key) | AWS IAM Secret Access Key | `string` | `null` | no |
 | <a name="input_aws_secrets_manager_enabled"></a> [aws\_secrets\_manager\_enabled](#input\_aws\_secrets\_manager\_enabled) | Flag to enable AWS Secrets Manager integration | `bool` | `false` | no |
-| <a name="input_aws_service_account_enabled"></a> [aws\_service\_account\_enabled](#input\_aws\_service\_account\_enabled) | Flag to enable AWS IAM service account | `bool` | `false` | no |
 | <a name="input_azure_acr_admin_password"></a> [azure\_acr\_admin\_password](#input\_azure\_acr\_admin\_password) | Azure Container Registry admin password | `string` | `null` | no |
 | <a name="input_azure_acr_admin_username"></a> [azure\_acr\_admin\_username](#input\_azure\_acr\_admin\_username) | Azure Container Registry admin username | `string` | `null` | no |
 | <a name="input_azure_acr_enabled"></a> [azure\_acr\_enabled](#input\_azure\_acr\_enabled) | Flag to enable Azure Container Registry integration | `bool` | `false` | no |
