@@ -73,7 +73,7 @@ variable "aws_role_arn" {
 variable "aws_s3_enabled" {
   type        = bool
   description = "Flag to enable/disable AWS S3 integration"
-  default     = false
+  default     = true
 }
 
 variable "aws_s3_bucket_name" {
@@ -85,13 +85,13 @@ variable "aws_s3_bucket_name" {
 variable "aws_ecr_enabled" {
   type        = bool
   description = "Flag to enable/disable AWS ECR integration"
-  default     = false
+  default     = true
 }
 
 variable "aws_parameter_store_enabled" {
   type        = bool
   description = "Flag to enable/disable AWS Parameter Store integration"
-  default     = false
+  default     = true
 }
 
 variable "aws_secrets_manager_enabled" {
@@ -103,7 +103,7 @@ variable "aws_secrets_manager_enabled" {
 variable "aws_cluster_integration_enabled" {
   type        = bool
   description = "Flag to enable/disable AWS EKS cluster integration"
-  default     = false
+  default     = true
 }
 
 # Azure Variables
