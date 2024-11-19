@@ -39,9 +39,9 @@ locals {
     container_registry_admin_password = var.azure_acr_admin_password
     container_registry_admin_username = var.azure_acr_admin_username
     container_registry_login_server   = var.azure_acr_login_server
-    blob_storage_enabled              = var.azure_storage_enabled
-    blob_storage_connection_string    = var.azure_storage_connection_string
-    blob_storage_root_url             = var.azure_storage_root_url
+    blob_storage_enabled              = var.azure_blob_storage_enabled
+    blob_storage_connection_string    = var.azure_blob_storage_connection_string
+    blob_storage_root_url             = var.azure_blob_storage_root_url
   }
 
   # GCP provider configuration

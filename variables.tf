@@ -1,18 +1,18 @@
-# Common Required Variables
+# Core Configuration Variables
 variable "control_plane_url" {
   type        = string
-  description = "URL of the control plane"
+  description = "URL of the TrueFoundry control plane (e.g., 'https://app.truefoundry.com')"
 }
 
 variable "tfy_api_key" {
   type        = string
-  description = "API key for authentication"
+  description = "TrueFoundry API key for authentication. Can be obtained from the TrueFoundry console."
   sensitive   = true
 }
 
 variable "cluster_name" {
   type        = string
-  description = "Name of the cluster to create"
+  description = "Name of the Kubernetes cluster to create or manage. Must be unique within your organization."
 }
 
 variable "cluster_type" {
@@ -24,247 +24,254 @@ variable "cluster_type" {
   }
 }
 
-# Common Optional Variables
+# Operational Variables
 variable "always_update" {
   type        = bool
-  description = "If set to true, forces the cluster configuration to be applied on every terraform apply, even if there are no changes"
+  description = "Forces cluster configuration updates on every terraform apply, even without changes. Use with caution as it may cause unnecessary updates."
   default     = false
 }
 
-# AWS Variables
+# AWS-specific Configuration
 variable "aws_account_id" {
   type        = string
-  description = "AWS Account ID"
+  description = "AWS Account ID where the EKS cluster will be created (e.g., '123456789012')"
   default     = null
 }
 
 variable "aws_region" {
   type        = string
-  description = "AWS Region name"
+  description = "AWS Region where resources will be created (e.g., 'us-west-2')"
   default     = null
 }
 
 variable "aws_platform_features_user_enabled" {
   type        = bool
-  description = "Flag to enable AWS IAM service account"
+  description = "Enable AWS IAM user-based authentication. If true, requires aws_platform_features_user_access_key_id and aws_platform_features_user_secret_access_key."
   default     = false
 }
 
 variable "aws_platform_features_user_access_key_id" {
   type        = string
-  description = "AWS IAM Access Key ID"
+  description = "AWS IAM Access Key ID for user-based authentication. Required if aws_platform_features_user_enabled is true."
   sensitive   = true
   default     = null
 }
 
 variable "aws_platform_features_user_secret_access_key" {
   type        = string
-  description = "AWS IAM Secret Access Key"
+  description = "AWS IAM Secret Access Key for user-based authentication. Required if aws_platform_features_user_enabled is true."
   sensitive   = true
   default     = null
 }
 
 variable "aws_platform_features_role_arn" {
   type        = string
-  description = "AWS IAM Role ARN"
+  description = "AWS IAM Role ARN for role-based authentication (e.g., 'arn:aws:iam::123456789012:role/TrueFoundryRole')"
   default     = null
 }
 
+# AWS Service Integration Options
 variable "aws_s3_enabled" {
   type        = bool
-  description = "Flag to enable AWS S3 integration"
+  description = "Enable AWS S3 integration for cluster storage capabilities"
   default     = true
 }
 
 variable "aws_s3_bucket_name" {
   type        = string
-  description = "AWS S3 bucket name"
+  description = "Name of the S3 bucket to use for cluster storage. Required if aws_s3_enabled is true."
   default     = null
 }
 
 variable "aws_ecr_enabled" {
   type        = bool
-  description = "Flag to enable AWS ECR integration"
+  description = "Enable AWS Elastic Container Registry (ECR) integration for container image storage"
   default     = true
 }
 
 variable "aws_parameter_store_enabled" {
   type        = bool
-  description = "Flag to enable AWS Parameter Store integration"
+  description = "Enable AWS Systems Manager Parameter Store integration for secret management"
   default     = true
 }
 
 variable "aws_secrets_manager_enabled" {
   type        = bool
-  description = "Flag to enable AWS Secrets Manager integration"
+  description = "Enable AWS Secrets Manager integration for enhanced secrets management capabilities"
   default     = false
 }
 
 variable "aws_cluster_integration_enabled" {
   type        = bool
-  description = "Flag to enable AWS EKS cluster integration"
+  description = "Enable direct integration with AWS EKS cluster services"
   default     = true
 }
 
-# Azure Variables
+# Azure-specific Configuration
 variable "azure_subscription_id" {
   type        = string
-  description = "Azure Subscription ID"
+  description = "Azure Subscription ID where the AKS cluster will be created (e.g., '12345678-1234-1234-1234-123456789012')"
   default     = null
 }
 
 variable "azure_resource_group_name" {
   type        = string
-  description = "Azure Resource Group name"
+  description = "Name of the Azure Resource Group where the AKS cluster will be created"
   default     = null
 }
 
 variable "azure_cluster_integration_enabled" {
   type        = bool
-  description = "Flag to enable Azure AKS cluster integration"
-  default     = false
+  description = "Enable direct integration with Azure AKS cluster services"
+  default     = true
 }
 
+# Azure Authentication
 variable "azure_client_id" {
   type        = string
-  description = "Azure Service Principal Client ID"
+  description = "Azure Service Principal Client ID for authentication"
   default     = null
 }
 
 variable "azure_client_secret" {
   type        = string
-  description = "Azure Service Principal Client Secret"
+  description = "Azure Service Principal Client Secret for authentication"
   sensitive   = true
   default     = null
 }
 
 variable "azure_tenant_id" {
   type        = string
-  description = "Azure Tenant ID"
+  description = "Azure Tenant ID associated with the subscription"
   default     = null
 }
 
+# Azure Container Registry Configuration
 variable "azure_acr_enabled" {
   type        = bool
-  description = "Flag to enable Azure Container Registry integration"
-  default     = false
+  description = "Enable Azure Container Registry (ACR) integration for container image storage"
+  default     = true
 }
 
 variable "azure_acr_admin_password" {
   type        = string
-  description = "Azure Container Registry admin password"
+  description = "Admin password for Azure Container Registry. Required if azure_acr_enabled is true."
   sensitive   = true
   default     = null
 }
 
 variable "azure_acr_admin_username" {
   type        = string
-  description = "Azure Container Registry admin username"
+  description = "Admin username for Azure Container Registry. Required if azure_acr_enabled is true."
   default     = null
 }
 
 variable "azure_acr_login_server" {
   type        = string
-  description = "Azure Container Registry login server URL"
+  description = "Azure Container Registry login server URL (e.g., 'myregistry.azurecr.io')"
   default     = null
 }
 
-variable "azure_storage_enabled" {
+# Azure Storage Configuration
+variable "azure_blob_storage_enabled" {
   type        = bool
-  description = "Flag to enable Azure Blob Storage integration"
-  default     = false
+  description = "Enable Azure Blob Storage integration for cluster storage capabilities"
+  default     = true
 }
 
-variable "azure_storage_connection_string" {
+variable "azure_blob_storage_connection_string" {
   type        = string
-  description = "Azure Storage Account connection string"
+  description = "Connection string for Azure Storage Account. Required if azure_blob_storage_enabled is true."
   sensitive   = true
   default     = null
 }
 
-variable "azure_storage_root_url" {
+variable "azure_blob_storage_root_url" {
   type        = string
-  description = "Azure Storage Account root URL"
+  description = "Root URL for Azure Storage Account (e.g., 'https://mystorageaccount.blob.core.windows.net')"
   default     = null
 }
 
-# GCP Variables
+# GCP-specific Configuration
 variable "gcp_project_id" {
   type        = string
-  description = "GCP Project ID"
+  description = "GCP Project ID where the GKE cluster will be created"
   default     = null
 }
 
+# GCP Service Account Configuration
 variable "gcp_sa_key_type" {
   type        = string
-  description = "GCP Service Account key type"
+  description = "GCP Service Account key type (typically 'service_account')"
   default     = null
 }
 
 variable "gcp_sa_client_id" {
   type        = string
-  description = "GCP Service Account client ID"
+  description = "GCP Service Account client ID for authentication"
   default     = null
 }
 
 variable "gcp_sa_client_email" {
   type        = string
-  description = "GCP Service Account client email"
+  description = "GCP Service Account email address (e.g., 'service-account@project-id.iam.gserviceaccount.com')"
   default     = null
 }
 
 variable "gcp_sa_private_key" {
   type        = string
-  description = "GCP Service Account private key"
+  description = "GCP Service Account private key in PEM format"
   sensitive   = true
   default     = null
 }
 
 variable "gcp_sa_project_id" {
   type        = string
-  description = "GCP Service Account project ID"
+  description = "GCP Project ID associated with the Service Account"
   default     = null
 }
 
+# GCP OAuth Configuration
 variable "gcp_sa_auth_uri" {
   type        = string
-  description = "GCP Service Account auth URI"
+  description = "GCP OAuth authentication URI"
   default     = "https://accounts.google.com/o/oauth2/auth"
 }
 
 variable "gcp_sa_token_uri" {
   type        = string
-  description = "GCP Service Account token URI"
+  description = "GCP OAuth token URI"
   default     = "https://oauth2.googleapis.com/token"
 }
 
 variable "gcp_sa_auth_provider_cert_url" {
   type        = string
-  description = "GCP Service Account auth provider cert URL"
+  description = "GCP OAuth provider certificate URL"
   default     = "https://www.googleapis.com/oauth2/v1/certs"
 }
 
 variable "gcp_sa_client_cert_url" {
   type        = string
-  description = "GCP Service Account client cert URL"
+  description = "GCP Service Account client certificate URL"
   default     = null
 }
 
 variable "gcp_sa_universe_domain" {
   type        = string
-  description = "GCP Service Account universe domain"
+  description = "GCP Service Account universe domain (typically 'googleapis.com')"
   default     = "googleapis.com"
 }
 
+# GCP Storage Configuration
 variable "gcp_artifact_registry_url" {
   type        = string
-  description = "GCP Artifact Registry URL"
+  description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY')"
   default     = null
 }
 
 variable "gcp_storage_bucket_url" {
   type        = string
-  description = "GCP Storage bucket URL"
+  description = "URL for GCP Storage bucket (e.g., 'gs://bucket-name')"
   default     = null
 }
 
