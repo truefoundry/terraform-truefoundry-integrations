@@ -12,10 +12,10 @@ locals {
     cloud_region     = var.aws_region
 
     // Auth related
-    service_account_enabled    = var.aws_service_account_enabled
-    service_account_key_id     = var.aws_access_key_id
-    service_account_key_secret = var.aws_secret_access_key
-    service_account_role_arn   = var.aws_role_arn
+    platform_features_user_enabled    = var.aws_platform_features_user_enabled
+    platform_features_user_key_id     = var.aws_platform_features_user_access_key_id
+    platform_features_user_key_secret = var.aws_platform_features_user_secret_access_key
+    platform_features_role_arn        = var.aws_platform_features_role_arn
 
     // Feature flags
     object_store_enabled        = var.aws_s3_enabled
@@ -39,9 +39,9 @@ locals {
     container_registry_admin_password = var.azure_acr_admin_password
     container_registry_admin_username = var.azure_acr_admin_username
     container_registry_login_server   = var.azure_acr_login_server
-    blob_storage_enabled              = var.azure_storage_enabled
-    blob_storage_connection_string    = var.azure_storage_connection_string
-    blob_storage_root_url             = var.azure_storage_root_url
+    blob_storage_enabled              = var.azure_blob_storage_enabled
+    blob_storage_connection_string    = var.azure_blob_storage_connection_string
+    blob_storage_root_url             = var.azure_blob_storage_root_url
   }
 
   # GCP provider configuration
