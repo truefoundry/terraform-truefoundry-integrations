@@ -30,15 +30,15 @@
         "authorized_subjects": ["team:everyone"],
         "registry_url": "${cloud_account_id}.dkr.ecr.${cloud_region}.amazonaws.com"
       }%{ endif }
-      %{ if (object_store_enabled || container_registry_enabled) && secret_store_enabled },%{ endif }
-      %{ if secret_store_enabled }
+      %{ if (object_store_enabled || container_registry_enabled) && parameter_store_enabled },%{ endif }
+      %{ if parameter_store_enabled }
       {
         "name": "parameter-store",
         "type": "integration/secret-store/aws/parameter-store",
         "authorized_subjects": ["team:everyone"],
         "region": "${cloud_region}"
       }%{ endif }
-      %{ if (object_store_enabled || container_registry_enabled || secret_store_enabled) && secrets_manager_enabled },%{ endif }
+      %{ if (object_store_enabled || container_registry_enabled || parameter_store_enabled) && secrets_manager_enabled },%{ endif }
       %{ if secrets_manager_enabled }
       {
         "name": "secrets-manager",
@@ -46,7 +46,7 @@
         "authorized_subjects": ["team:everyone"],
         "region": "${cloud_region}"
       }%{ endif }
-      %{ if (object_store_enabled || container_registry_enabled || secret_store_enabled || secrets_manager_enabled) && cluster_integration_enabled },%{ endif }
+      %{ if (object_store_enabled || container_registry_enabled || parameter_store_enabled || secrets_manager_enabled) && cluster_integration_enabled },%{ endif }
       %{ if cluster_integration_enabled }
       {
         "name": "cluster-integration",
