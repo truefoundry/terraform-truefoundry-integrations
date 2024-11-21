@@ -228,7 +228,7 @@ variable "gcp_sa_private_key" {
 # GCP Storage Configuration
 variable "gcp_artifact_registry_url" {
   type        = string
-  description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY')"
+  description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID')"
   default     = null
 }
 
