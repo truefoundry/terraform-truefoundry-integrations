@@ -1,5 +1,5 @@
 locals {
-  template_file_map = {
+  provider_template = {
     "aws-eks"          = "${path.module}/templates/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/azure.json.tpl"
     "gcp-gke-standard" = "${path.module}/templates/gcp.json.tpl"
@@ -21,7 +21,7 @@ locals {
     object_store_enabled        = var.aws_s3_enabled
     object_store_bucket_name    = var.aws_s3_bucket_name
     container_registry_enabled  = var.aws_ecr_enabled
-    secret_store_enabled        = var.aws_parameter_store_enabled
+    parameter_store_enabled     = var.aws_parameter_store_enabled
     secrets_manager_enabled     = var.aws_secrets_manager_enabled
     cluster_integration_enabled = var.aws_cluster_integration_enabled
   }
@@ -46,22 +46,16 @@ locals {
 
   # GCP provider configuration
   gcp_config = {
-    cluster_name = var.cluster_name
-    project_id   = var.gcp_project_id
-
-    serviceaccount_key_type                        = var.gcp_sa_key_type
-    serviceaccount_key_client_id                   = var.gcp_sa_client_id
-    serviceaccount_key_client_email                = var.gcp_sa_client_email
-    serviceaccount_key_private_key                 = var.gcp_sa_private_key
-    serviceaccount_key_project_id                  = var.gcp_sa_project_id
-    serviceaccount_key_auth_uri                    = var.gcp_sa_auth_uri
-    serviceaccount_key_token_uri                   = var.gcp_sa_token_uri
-    serviceaccount_key_auth_provider_x509_cert_url = var.gcp_sa_auth_provider_cert_url
-    serviceaccount_key_client_x509_cert_url        = var.gcp_sa_client_cert_url
-    serviceaccount_key_universe_domain             = var.gcp_sa_universe_domain
-
-    artifact_registry_url = var.gcp_artifact_registry_url
-    bucket_url            = var.gcp_storage_bucket_url
+    cluster_name                = var.cluster_name
+    project_id                  = var.gcp_project_id
+    region                      = var.gcp_region
+    sa_auth_data                = var.gcp_sa_auth_data
+    container_registry_enabled  = var.gcp_container_registry_enabled
+    blob_storage_enabled        = var.gcp_blob_storage_enabled
+    secrets_manager_enabled     = var.gcp_secrets_manager_enabled
+    cluster_integration_enabled = var.gcp_cluster_integration_enabled
+    artifact_registry_url       = var.gcp_artifact_registry_url
+    bucket_url                  = var.gcp_storage_bucket_url
   }
 
   # Default configuration
@@ -71,7 +65,7 @@ locals {
 
   # Select appropriate configuration based on cluster type
   provider_config = templatefile(
-    local.template_file_map[var.cluster_type],
+    local.provider_template[var.cluster_type],
     var.cluster_type == "aws-eks" ? local.aws_config : (
       var.cluster_type == "azure-aks" ? local.azure_config : (
         var.cluster_type == "gcp-gke-standard" ? local.gcp_config : local.default_config

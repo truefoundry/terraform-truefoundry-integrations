@@ -1,4 +1,5 @@
 # terraform-truefoundry-integrations
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -59,18 +60,18 @@ No modules.
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Name of the Kubernetes cluster to create or manage. Must be unique within your organization. | `string` | n/a | yes |
 | <a name="input_cluster_type"></a> [cluster\_type](#input\_cluster\_type) | Type of cluster to create (aws-eks, azure-aks, or gcp-gke-standard) | `string` | n/a | yes |
 | <a name="input_control_plane_url"></a> [control\_plane\_url](#input\_control\_plane\_url) | URL of the TrueFoundry control plane (e.g., 'https://app.truefoundry.com') | `string` | n/a | yes |
-| <a name="input_gcp_artifact_registry_url"></a> [gcp\_artifact\_registry\_url](#input\_gcp\_artifact\_registry\_url) | URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT\_ID/REPOSITORY') | `string` | `null` | no |
+| <a name="input_gcp_artifact_registry_url"></a> [gcp\_artifact\_registry\_url](#input\_gcp\_artifact\_registry\_url) | URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT\_ID') | `string` | `null` | no |
+| <a name="input_gcp_blob_storage_enabled"></a> [gcp\_blob\_storage\_enabled](#input\_gcp\_blob\_storage\_enabled) | Enable GCP Blob Storage integration for cluster storage capabilities | `bool` | `true` | no |
+| <a name="input_gcp_cluster_integration_enabled"></a> [gcp\_cluster\_integration\_enabled](#input\_gcp\_cluster\_integration\_enabled) | Enable direct integration with GCP GKE cluster services | `bool` | `true` | no |
+| <a name="input_gcp_container_registry_enabled"></a> [gcp\_container\_registry\_enabled](#input\_gcp\_container\_registry\_enabled) | Enable GCP Container Registry integration for container image storage | `bool` | `true` | no |
 | <a name="input_gcp_project_id"></a> [gcp\_project\_id](#input\_gcp\_project\_id) | GCP Project ID where the GKE cluster will be created | `string` | `null` | no |
-| <a name="input_gcp_sa_auth_provider_cert_url"></a> [gcp\_sa\_auth\_provider\_cert\_url](#input\_gcp\_sa\_auth\_provider\_cert\_url) | GCP OAuth provider certificate URL | `string` | `"https://www.googleapis.com/oauth2/v1/certs"` | no |
-| <a name="input_gcp_sa_auth_uri"></a> [gcp\_sa\_auth\_uri](#input\_gcp\_sa\_auth\_uri) | GCP OAuth authentication URI | `string` | `"https://accounts.google.com/o/oauth2/auth"` | no |
-| <a name="input_gcp_sa_client_cert_url"></a> [gcp\_sa\_client\_cert\_url](#input\_gcp\_sa\_client\_cert\_url) | GCP Service Account client certificate URL | `string` | `null` | no |
-| <a name="input_gcp_sa_client_email"></a> [gcp\_sa\_client\_email](#input\_gcp\_sa\_client\_email) | GCP Service Account email address (e.g., 'service-account@project-id.iam.gserviceaccount.com') | `string` | `null` | no |
+| <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | GCP Region where the GKE cluster is located | `string` | `null` | no |
+| <a name="input_gcp_sa_auth_data"></a> [gcp\_sa\_auth\_data](#input\_gcp\_sa\_auth\_data) | GCP Service Account auth\_data | `string` | `null` | no |
+| <a name="input_gcp_sa_client_email"></a> [gcp\_sa\_client\_email](#input\_gcp\_sa\_client\_email) | GCP Service Account email address (e.g., 'service-account@project-id.iam.gsa.com') | `string` | `null` | no |
 | <a name="input_gcp_sa_client_id"></a> [gcp\_sa\_client\_id](#input\_gcp\_sa\_client\_id) | GCP Service Account client ID for authentication | `string` | `null` | no |
-| <a name="input_gcp_sa_key_type"></a> [gcp\_sa\_key\_type](#input\_gcp\_sa\_key\_type) | GCP Service Account key type (typically 'service\_account') | `string` | `null` | no |
+| <a name="input_gcp_sa_key_type"></a> [gcp\_sa\_key\_type](#input\_gcp\_sa\_key\_type) | GCP Service Account key type (typically 'service\_account') | `string` | `"service_account"` | no |
 | <a name="input_gcp_sa_private_key"></a> [gcp\_sa\_private\_key](#input\_gcp\_sa\_private\_key) | GCP Service Account private key in PEM format | `string` | `null` | no |
-| <a name="input_gcp_sa_project_id"></a> [gcp\_sa\_project\_id](#input\_gcp\_sa\_project\_id) | GCP Project ID associated with the Service Account | `string` | `null` | no |
-| <a name="input_gcp_sa_token_uri"></a> [gcp\_sa\_token\_uri](#input\_gcp\_sa\_token\_uri) | GCP OAuth token URI | `string` | `"https://oauth2.googleapis.com/token"` | no |
-| <a name="input_gcp_sa_universe_domain"></a> [gcp\_sa\_universe\_domain](#input\_gcp\_sa\_universe\_domain) | GCP Service Account universe domain (typically 'googleapis.com') | `string` | `"googleapis.com"` | no |
+| <a name="input_gcp_secrets_manager_enabled"></a> [gcp\_secrets\_manager\_enabled](#input\_gcp\_secrets\_manager\_enabled) | Enable GCP Secrets Manager integration for secret management | `bool` | `true` | no |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
 | <a name="input_tfy_api_key"></a> [tfy\_api\_key](#input\_tfy\_api\_key) | TrueFoundry API key for authentication. Can be obtained from the TrueFoundry console. | `string` | n/a | yes |
 

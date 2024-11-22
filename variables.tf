@@ -203,7 +203,7 @@ variable "gcp_project_id" {
 variable "gcp_sa_key_type" {
   type        = string
   description = "GCP Service Account key type (typically 'service_account')"
-  default     = null
+  default     = "service_account"
 }
 
 variable "gcp_sa_client_id" {
@@ -214,7 +214,7 @@ variable "gcp_sa_client_id" {
 
 variable "gcp_sa_client_email" {
   type        = string
-  description = "GCP Service Account email address (e.g., 'service-account@project-id.iam.gserviceaccount.com')"
+  description = "GCP Service Account email address (e.g., 'service-account@project-id.iam.gsa.com')"
   default     = null
 }
 
@@ -225,47 +225,10 @@ variable "gcp_sa_private_key" {
   default     = null
 }
 
-variable "gcp_sa_project_id" {
-  type        = string
-  description = "GCP Project ID associated with the Service Account"
-  default     = null
-}
-
-# GCP OAuth Configuration
-variable "gcp_sa_auth_uri" {
-  type        = string
-  description = "GCP OAuth authentication URI"
-  default     = "https://accounts.google.com/o/oauth2/auth"
-}
-
-variable "gcp_sa_token_uri" {
-  type        = string
-  description = "GCP OAuth token URI"
-  default     = "https://oauth2.googleapis.com/token"
-}
-
-variable "gcp_sa_auth_provider_cert_url" {
-  type        = string
-  description = "GCP OAuth provider certificate URL"
-  default     = "https://www.googleapis.com/oauth2/v1/certs"
-}
-
-variable "gcp_sa_client_cert_url" {
-  type        = string
-  description = "GCP Service Account client certificate URL"
-  default     = null
-}
-
-variable "gcp_sa_universe_domain" {
-  type        = string
-  description = "GCP Service Account universe domain (typically 'googleapis.com')"
-  default     = "googleapis.com"
-}
-
 # GCP Storage Configuration
 variable "gcp_artifact_registry_url" {
   type        = string
-  description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY')"
+  description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID')"
   default     = null
 }
 
@@ -275,3 +238,37 @@ variable "gcp_storage_bucket_url" {
   default     = null
 }
 
+variable "gcp_cluster_integration_enabled" {
+  type        = bool
+  description = "Enable direct integration with GCP GKE cluster services"
+  default     = true
+}
+
+variable "gcp_blob_storage_enabled" {
+  type        = bool
+  description = "Enable GCP Blob Storage integration for cluster storage capabilities"
+  default     = true
+}
+
+variable "gcp_secrets_manager_enabled" {
+  type        = bool
+  description = "Enable GCP Secrets Manager integration for secret management"
+  default     = true
+}
+variable "gcp_container_registry_enabled" {
+  type        = bool
+  description = "Enable GCP Container Registry integration for container image storage"
+  default     = true
+}
+
+variable "gcp_region" {
+  type        = string
+  description = "GCP Region where the GKE cluster is located"
+  default     = null
+}
+
+variable "gcp_sa_auth_data" {
+  type        = string
+  description = "GCP Service Account auth_data"
+  default     = null
+}
