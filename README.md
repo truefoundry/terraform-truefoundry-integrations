@@ -67,10 +67,6 @@ No modules.
 | <a name="input_gcp_project_id"></a> [gcp\_project\_id](#input\_gcp\_project\_id) | GCP Project ID where the GKE cluster will be created | `string` | `null` | no |
 | <a name="input_gcp_region"></a> [gcp\_region](#input\_gcp\_region) | GCP Region where the GKE cluster is located | `string` | `null` | no |
 | <a name="input_gcp_sa_auth_data"></a> [gcp\_sa\_auth\_data](#input\_gcp\_sa\_auth\_data) | GCP Service Account auth\_data | `string` | `null` | no |
-| <a name="input_gcp_sa_client_email"></a> [gcp\_sa\_client\_email](#input\_gcp\_sa\_client\_email) | GCP Service Account email address (e.g., 'service-account@project-id.iam.gsa.com') | `string` | `null` | no |
-| <a name="input_gcp_sa_client_id"></a> [gcp\_sa\_client\_id](#input\_gcp\_sa\_client\_id) | GCP Service Account client ID for authentication | `string` | `null` | no |
-| <a name="input_gcp_sa_key_type"></a> [gcp\_sa\_key\_type](#input\_gcp\_sa\_key\_type) | GCP Service Account key type (typically 'service\_account') | `string` | `"service_account"` | no |
-| <a name="input_gcp_sa_private_key"></a> [gcp\_sa\_private\_key](#input\_gcp\_sa\_private\_key) | GCP Service Account private key in PEM format | `string` | `null` | no |
 | <a name="input_gcp_secrets_manager_enabled"></a> [gcp\_secrets\_manager\_enabled](#input\_gcp\_secrets\_manager\_enabled) | Enable GCP Secrets Manager integration for secret management | `bool` | `true` | no |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
 | <a name="input_tfy_api_key"></a> [tfy\_api\_key](#input\_tfy\_api\_key) | TrueFoundry API key for authentication. Can be obtained from the TrueFoundry console. | `string` | n/a | yes |

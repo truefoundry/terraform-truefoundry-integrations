@@ -199,32 +199,6 @@ variable "gcp_project_id" {
   default     = null
 }
 
-# GCP Service Account Configuration
-variable "gcp_sa_key_type" {
-  type        = string
-  description = "GCP Service Account key type (typically 'service_account')"
-  default     = "service_account"
-}
-
-variable "gcp_sa_client_id" {
-  type        = string
-  description = "GCP Service Account client ID for authentication"
-  default     = null
-}
-
-variable "gcp_sa_client_email" {
-  type        = string
-  description = "GCP Service Account email address (e.g., 'service-account@project-id.iam.gsa.com')"
-  default     = null
-}
-
-variable "gcp_sa_private_key" {
-  type        = string
-  description = "GCP Service Account private key in PEM format"
-  sensitive   = true
-  default     = null
-}
-
 # GCP Storage Configuration
 variable "gcp_artifact_registry_url" {
   type        = string

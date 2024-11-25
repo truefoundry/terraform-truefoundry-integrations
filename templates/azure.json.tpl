@@ -16,6 +16,9 @@
           "password": "${container_registry_admin_password}",
           "username": "${container_registry_admin_username}"
         },
+        "authorized_subjects": [
+          "team:everyone"
+        ],
         "registry_url": "${container_registry_login_server}"
       }%{ endif }
       %{ if container_registry_enabled && blob_storage_enabled },%{ endif }
@@ -27,6 +30,9 @@
           "type": "connection-string",
           "connection_string": "${blob_storage_connection_string}"
         },
+        "authorized_subjects": [
+      "team:everyone"
+    ],
         "storage_root": "${blob_storage_root_url}"
       }%{ endif }
       %{ if (container_registry_enabled || blob_storage_enabled) && cluster_integration_enabled },%{ endif }
@@ -41,6 +47,9 @@
           "client_secret": "${cluster_integration_client_secret}",
           "subscription_id": "${subscription_id}"
         },
+        "authorized_subjects": [
+          "team:everyone"
+        ],
         "cluster_name": "${cluster_name}",
         "resource_group": "${resource_group_name}",
         "tfy_cluster_id": "${cluster_name}"
