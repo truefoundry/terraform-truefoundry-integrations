@@ -24,9 +24,15 @@ data "local_file" "cluster_output" {
 }
 
 locals {
-  output_lines = compact(split("\n", data.local_file.cluster_output.content))
-  output_map = { for line in local.output_lines :
-    split("::", line)[0] => split("::", line)[1]
-    if length(split("::", line)) == 2
-  }
+  output_lines = try(
+    compact(split("\n", data.local_file.cluster_output.content)),
+    []
+  )
+  output_map = try(
+    { for line in local.output_lines :
+      split("::", line)[0] => split("::", line)[1]
+      if length(split("::", line)) == 2
+    },
+    {}
+  )
 }
