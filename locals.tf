@@ -83,15 +83,12 @@ locals {
   )
 
   # Split into lines and remove empty ones
-  output_lines = compact(split("\n", trimspace(local.raw_output)))
+  output_lines = compact(split("\n", local.raw_output))
 
-  # Parse key-value pairs with more robust error handling
+  # Parse output file into key-value map
   output_map = {
     for line in local.output_lines :
-    split("::", line)[0] => trimspace(split("::", line)[1])
-    if can(split("::", line)) &&
-    length(split("::", line)) == 2 &&
-    trimspace(split("::", line)[0]) != "" &&
-    trimspace(split("::", line)[1]) != ""
+    split("::", line)[0] => split("::", line)[1]
+    if length(split("::", line)) == 2
   }
 }
