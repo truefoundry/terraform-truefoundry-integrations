@@ -73,24 +73,30 @@ locals {
     )
   )
 
-
+  # Path to the cluster output file
   output_file = "${path.module}/cluster_output.txt"
 
-  # Safely read the output file if it exists
+  # Safely read and parse the output file
   raw_output = try(
-    fileexists(local.output_file) ? file(local.output_file) : "",
+    data.local_file.cluster_output[0].content,
     ""
   )
 
-  # Parse the output lines safely
-  output_lines = compact(split("\n", local.raw_output))
+  # Split into lines and remove empty ones
+  output_lines = compact(split("\n", trimspace(local.raw_output)))
 
-  # Create the output map with proper error handling
+  # Parse key-value pairs with more robust error handling
   output_map = {
     for line in local.output_lines :
-    split("::", line)[0] => split("::", line)[1]
-    if length(split("::", line)) == 2
+    split("::", line)[0] => trimspace(split("::", line)[1])
+    if can(split("::", line)) &&
+    length(split("::", line)) == 2 &&
+    trimspace(split("::", line)[0]) != "" &&
+    trimspace(split("::", line)[1]) != ""
   }
+
+  # Provide default empty map if no valid output
+  parsed_output = length(local.output_map) > 0 ? local.output_map : {}
 }
 
 
