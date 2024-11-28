@@ -94,9 +94,4 @@ locals {
     trimspace(split("::", line)[0]) != "" &&
     trimspace(split("::", line)[1]) != ""
   }
-
-  # Provide default empty map if no valid output
-  parsed_output = length(local.output_map) > 0 ? local.output_map : {}
 }
-
-

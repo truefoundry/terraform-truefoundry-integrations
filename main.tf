@@ -28,4 +28,3 @@ data "local_file" "cluster_output" {
   # Handle file not existing yet
   count = fileexists(local.output_file) ? 1 : 0
 }
-
