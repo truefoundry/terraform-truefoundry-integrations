@@ -73,5 +73,24 @@ locals {
     )
   )
 
+
   output_file = "${path.module}/cluster_output.txt"
+
+  # Safely read the output file if it exists
+  raw_output = try(
+    fileexists(local.output_file) ? file(local.output_file) : "",
+    ""
+  )
+
+  # Parse the output lines safely
+  output_lines = compact(split("\n", local.raw_output))
+
+  # Create the output map with proper error handling
+  output_map = {
+    for line in local.output_lines :
+    split("::", line)[0] => split("::", line)[1]
+    if length(split("::", line)) == 2
+  }
 }
+
+
