@@ -77,10 +77,8 @@ locals {
   output_file = "${path.module}/cluster_output.txt"
 
   # Safely read and parse the output file
-  raw_output = try(
-    data.local_file.cluster_output[0].content,
-    ""
-  )
+  raw_output = data.local_file.cluster_output.content
+
 
   # Split into lines and remove empty ones
   output_lines = compact(split("\n", local.raw_output))

@@ -24,7 +24,4 @@ resource "null_resource" "create_cluster" {
 data "local_file" "cluster_output" {
   depends_on = [null_resource.create_cluster]
   filename   = local.output_file
-
-  # Handle file not existing yet
-  count = fileexists(local.output_file) ? 1 : 0
 }
