@@ -1,20 +1,20 @@
 #!/bin/bash
 set -e
 
-# Configuration variables
-CONTROL_PLANE_URL="$1"
-API_KEY="$2"
-CLUSTER_NAME="$3"
-CLUSTER_TYPE="$4"
-PROVIDER_CONFIG_BASE64="$5"
-OUTPUT_FILE="$6"
+# Read input from stdin (Terraform external data source)
+eval "$(jq -r '@sh "
+CONTROL_PLANE_URL=\(.control_plane_url)
+API_KEY=\(.api_key)
+CLUSTER_NAME=\(.cluster_name)
+CLUSTER_TYPE=\(.cluster_type)
+PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
+"')"
 
 # Validate required parameters
 [ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required"
 [ -z "${API_KEY}" ] && handle_error "API_KEY is required"
 [ -z "${CLUSTER_NAME}" ] && handle_error "CLUSTER_NAME is required"
 [ -z "${CLUSTER_TYPE}" ] && handle_error "CLUSTER_TYPE is required"
-[ -z "${OUTPUT_FILE}" ] && handle_error "OUTPUT_FILE is required"
 
 # Logging functions
 log_info() {
@@ -28,6 +28,7 @@ log_error() {
 # Error handling
 handle_error() {
     log_error "$1"
+    jq -n --arg error "$1" '{"error": $error}'
     exit 1
 }
 
@@ -49,12 +50,12 @@ make_request() {
 
     [ -n "$body" ] && curl_cmd="$curl_cmd -d '${body}'"
     
-    # Execute request and capture response
-    eval "${curl_cmd} '${url}'" > "${response_file}" 2>/dev/null
+    # Execute request and capture response, redirect all output to stderr
+    eval "${curl_cmd} '${url}'" > "${response_file}" 2>&2
     local curl_exit_code=$?
     
-    # Get HTTP status code
-    eval "${curl_cmd} -o /dev/null -w '%{http_code}' '${url}'" > "${http_code_file}" 2>/dev/null
+    # Get HTTP status code, redirect all output to stderr
+    eval "${curl_cmd} -o /dev/null -w '%{http_code}' '${url}'" > "${http_code_file}" 2>&2
     local http_code=$(<"${http_code_file}")
     
     # Cleanup
@@ -74,6 +75,7 @@ make_request() {
         return 1
     fi
     
+    # Output response to stdout but only within a function call
     cat "${response_file}"
     rm -f "${response_file}"
     return 0
@@ -169,7 +171,6 @@ get_tenant_name() {
     echo "${tenant_name}"
 }
 
-
 # Provider operations
 setup_provider_account() {
     [ -z "$PROVIDER_CONFIG_BASE64" ] && return
@@ -185,56 +186,46 @@ setup_provider_account() {
     log_info "Provider account created successfully"
 }
 
-# Output handling
-write_outputs() {
-    local cluster_id="$1"
-    local cluster_token="$2"
-    local tenant_name="$3"
-    
-    log_info "Writing outputs to ${OUTPUT_FILE}"
-    
-    # Use '::' as delimiter instead of '=' to handle base64 values
-    cat > "${OUTPUT_FILE}" <<EOF
-CLUSTER_ID::${cluster_id}
-CLUSTER_TOKEN::${cluster_token}
-TENANT_NAME::${tenant_name}
-EOF
-
-    if [ -f "${OUTPUT_FILE}" ]; then
-        log_info "Successfully wrote to ${OUTPUT_FILE}"
-        log_info "File contents:"
-        cat "${OUTPUT_FILE}" >&2
-    else
-        log_error "Failed to create ${OUTPUT_FILE}"
-        exit 1
-    fi
-}
-
 # Main execution
 main() {
+    # Capture all output in variables to prevent unwanted stdout
+    local environment_name
+    local cluster_manifest
+    local cluster_id
+    local cluster_token
+    local tenant_name
+
     # Verify platform health
     log_info "Checking platform health..."
-    make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" || \
+    make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || \
         handle_error "Platform health check failed"
 
     # Get environment and create cluster
-    local environment_name=$(get_environment_name)
+    environment_name=$(get_environment_name)
     log_info "Found environment: ${environment_name}"
 
-    local cluster_manifest=$(generate_cluster_manifest "${environment_name}")
-    local cluster_id=$(create_cluster "${cluster_manifest}")
-    local cluster_token=$(get_cluster_token "${cluster_id}")
+    cluster_manifest=$(generate_cluster_manifest "${environment_name}")
+    cluster_id=$(create_cluster "${cluster_manifest}")
+    cluster_token=$(get_cluster_token "${cluster_id}")
     
     # Setup provider account if configured
     setup_provider_account
 
     # Get tenant information
-    local tenant_name=$(get_tenant_name)
+    tenant_name=$(get_tenant_name)
 
-    # Write outputs to files
-    write_outputs "${cluster_id}" "${cluster_token}" "${tenant_name}" 
-    log_info "Successfully created cluster with ID: ${cluster_id}"
+    # Output only the final JSON result to stdout
+    jq -n \
+        --arg cluster_id "$cluster_id" \
+        --arg cluster_token "$cluster_token" \
+        --arg tenant_name "$tenant_name" \
+        '{
+            cluster_id: $cluster_id,
+            cluster_token: $cluster_token,
+            tenant_name: $tenant_name
+        }'
 }
 
-# Execute main function
-main
+# Execute main function and ensure only JSON output goes to stdout
+output=$(main)
+echo "$output"
