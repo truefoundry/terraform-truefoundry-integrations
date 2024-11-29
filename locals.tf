@@ -73,20 +73,10 @@ locals {
     )
   )
 
-  # Path to the cluster output file
-  output_file = "${path.module}/cluster_output.txt"
-
-  # Safely read and parse the output file
-  raw_output = data.local_file.cluster_output.content
-
-
-  # Split into lines and remove empty ones
-  output_lines = compact(split("\n", local.raw_output))
-
-  # Parse output file into key-value map
+  # Update the output_map to use the external data source
   output_map = {
-    for line in local.output_lines :
-    split("::", line)[0] => split("::", line)[1]
-    if length(split("::", line)) == 2
+    "CLUSTER_ID"    = data.external.create_cluster.result.cluster_id
+    "CLUSTER_TOKEN" = data.external.create_cluster.result.cluster_token
+    "TENANT_NAME"   = data.external.create_cluster.result.tenant_name
   }
 }
