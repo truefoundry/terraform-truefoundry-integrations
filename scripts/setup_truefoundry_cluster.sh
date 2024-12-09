@@ -208,8 +208,10 @@ main() {
     cluster_id=$(create_cluster "${cluster_manifest}")
     cluster_token=$(get_cluster_token "${cluster_id}")
     
-    # Setup provider account if configured
-    setup_provider_account
+    # Setup provider account if configured and cluster type is not generic
+    if [ "${CLUSTER_TYPE}" != "generic" ]; then
+        setup_provider_account
+    fi
 
     # Get tenant information
     tenant_name=$(get_tenant_name)

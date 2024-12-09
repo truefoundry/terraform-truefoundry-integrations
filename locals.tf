@@ -64,7 +64,7 @@ locals {
   }
 
   # Select appropriate configuration based on cluster type
-  provider_config = templatefile(
+  provider_config = var.cluster_type == "generic" ? "" : templatefile(
     local.provider_template[var.cluster_type],
     var.cluster_type == "aws-eks" ? local.aws_config : (
       var.cluster_type == "azure-aks" ? local.azure_config : (
