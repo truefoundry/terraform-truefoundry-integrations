@@ -17,10 +17,10 @@ variable "cluster_name" {
 
 variable "cluster_type" {
   type        = string
-  description = "Type of cluster to create (aws-eks, azure-aks, or gcp-gke-standard)"
+  description = "Type of cluster to create (aws-eks, azure-aks, gcp-gke-standard, generic)"
   validation {
-    condition     = contains(["aws-eks", "azure-aks", "gcp-gke-standard"], var.cluster_type)
-    error_message = "cluster_type must be one of: aws-eks, azure-aks, gcp-gke-standard"
+    condition     = contains(["aws-eks", "azure-aks", "gcp-gke-standard", "generic"], var.cluster_type)
+    error_message = "cluster_type must be one of: aws-eks, azure-aks, gcp-gke-standard, generic"
   }
 }
 
