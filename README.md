@@ -6,14 +6,13 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.4 |
-| <a name="requirement_local"></a> [local](#requirement\_local) | ~> 2.5 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | ~> 3.0 |
+| <a name="requirement_external"></a> [external](#requirement\_external) | 2.3.4 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_external"></a> [external](#provider\_external) | n/a |
+| <a name="provider_external"></a> [external](#provider\_external) | 2.3.4 |
 
 ## Modules
 
@@ -23,7 +22,7 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [external_external.create_cluster](https://registry.terraform.io/providers/hashicorp/external/latest/docs/data-sources/external) | data source |
+| [external_external.create_cluster](https://registry.terraform.io/providers/hashicorp/external/2.3.4/docs/data-sources/external) | data source |
 
 ## Inputs
 
@@ -67,6 +66,8 @@ No modules.
 | <a name="input_gcp_sa_auth_data"></a> [gcp\_sa\_auth\_data](#input\_gcp\_sa\_auth\_data) | GCP Service Account auth\_data | `string` | `null` | no |
 | <a name="input_gcp_secrets_manager_enabled"></a> [gcp\_secrets\_manager\_enabled](#input\_gcp\_secrets\_manager\_enabled) | Enable GCP Secrets Manager integration for secret management | `bool` | `true` | no |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
+| <a name="input_stderr_log_file"></a> [stderr\_log\_file](#input\_stderr\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stderr"` | no |
+| <a name="input_stdout_log_file"></a> [stdout\_log\_file](#input\_stdout\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stdout"` | no |
 | <a name="input_tfy_api_key"></a> [tfy\_api\_key](#input\_tfy\_api\_key) | TrueFoundry API key for authentication. Can be obtained from the TrueFoundry console. | `string` | n/a | yes |
 
 ## Outputs

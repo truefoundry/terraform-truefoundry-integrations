@@ -8,7 +8,12 @@ API_KEY=\(.api_key)
 CLUSTER_NAME=\(.cluster_name)
 CLUSTER_TYPE=\(.cluster_type)
 PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
+TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
+TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 "')"
+
+echo "" > $TRUEFOUNDRY_STDOUT_FILE
+
 
 # Validate required parameters
 [ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required"
@@ -18,12 +23,14 @@ PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
 
 # Logging functions
 log_info() {
-    echo "[INFO] $1" >&2
+    echo "[INFO] $1" >> $TRUEFOUNDRY_STDOUT_FILE
 }
 
 log_error() {
-    echo "[ERROR] $1" >&2
+    echo "[ERROR] $1" >> $TRUEFOUNDRY_STDERR_FILE
 }
+
+log_info $PROVIDER_CONFIG_BASE64
 
 # Error handling
 handle_error() {
@@ -41,7 +48,7 @@ make_request() {
     local response_file=$(mktemp)
     local http_code_file=$(mktemp)
     
-    log_info "Making ${method} request to ${url}"
+    log_info "make_request: Making ${method} request to ${url}"
     
     local curl_cmd="curl -s -X ${method} \
         -H 'Accept: application/json' \
@@ -83,7 +90,7 @@ make_request() {
 
 # Environment operations
 get_environment_name() {
-    log_info "Getting environment names..."
+    log_info "get_environment_name: Getting environment names..."
     local env_response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/environment/" "" "200,201") || \
         handle_error "Failed to get environment names"
 
@@ -123,7 +130,7 @@ EOF
 
 create_cluster() {
     local manifest="$1"
-    log_info "Creating cluster..."
+    log_info "create_cluster: Creating cluster..."
     local response=$(make_request "PUT" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/" "${manifest}" "200,201") || \
         handle_error "Failed to create cluster"
     
@@ -138,7 +145,7 @@ create_cluster() {
 
 get_cluster_token() {
     local cluster_id="$1"
-    log_info "Getting cluster token..."
+    log_info "get_cluster_token: Getting cluster token..."
     
     local response=$(make_request "GET" \
         "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${cluster_id}/token" \
@@ -155,7 +162,7 @@ get_cluster_token() {
 
 # Tenant operations
 get_tenant_name() {
-    log_info "Getting tenant name..."
+    log_info "get_tenant_name: Getting tenant name..."
     local hostname=$(echo "$CONTROL_PLANE_URL" | awk -F[/:] '{print $4}')
     
     local response=$(make_request "GET" \
@@ -175,15 +182,16 @@ get_tenant_name() {
 setup_provider_account() {
     [ -z "$PROVIDER_CONFIG_BASE64" ] && return
     
-    log_info "Creating provider account..."
+    log_info "setup_provider_account: Creating provider account..."
     local provider_manifest=$(echo "$PROVIDER_CONFIG_BASE64" | base64 -d)
     
+    log_info "setup_provider_account: ${provider_manifest}"
     make_request "PUT" \
         "${CONTROL_PLANE_URL}/api/svc/v1/provider-accounts/" \
         "${provider_manifest}" \
         "200,201" || handle_error "Failed to create provider account"
     
-    log_info "Provider account created successfully"
+    log_info "setup_provider_account: Provider account created successfully"
 }
 
 # Main execution
@@ -196,25 +204,29 @@ main() {
     local tenant_name
 
     # Verify platform health
-    log_info "Checking platform health..."
+    log_info "main: Checking platform health..."
     make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || \
         handle_error "Platform health check failed"
 
     # Get environment and create cluster
     environment_name=$(get_environment_name)
-    log_info "Found environment: ${environment_name}"
+    log_info "main: Found environment: ${environment_name}"
 
-    cluster_manifest=$(generate_cluster_manifest "${environment_name}")
-    cluster_id=$(create_cluster "${cluster_manifest}")
-    cluster_token=$(get_cluster_token "${cluster_id}")
-    
     # Setup provider account if configured and cluster type is not generic
     if [ "${CLUSTER_TYPE}" != "generic" ]; then
         setup_provider_account
     fi
+    cluster_manifest=$(generate_cluster_manifest "${environment_name}")
+    log_info "main: ${cluster_manifest}"
+    cluster_id=$(create_cluster "${cluster_manifest}")
+    cluster_token=$(get_cluster_token "${cluster_id}")
 
     # Get tenant information
     tenant_name=$(get_tenant_name)
+
+    log_info "main: cluster_id=$cluster_id"
+    log_info "main: cluster_token=$cluster_token"
+    log_info "main: tenant_name=$tenant_name"
 
     # Output only the final JSON result to stdout
     jq -n \

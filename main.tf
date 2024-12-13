@@ -8,6 +8,8 @@ data "external" "create_cluster" {
     cluster_name           = var.cluster_name
     cluster_type           = var.cluster_type
     provider_config_base64 = base64encode(local.provider_config)
+    stdout_log_file        = var.stdout_log_file
+    stderr_log_file        = var.stderr_log_file
     always_update          = var.always_update ? timestamp() : "initial"
   }
 }
