@@ -1,4 +1,7 @@
-# Core Configuration Variables
+##################################################################################
+## Core Configuration Variables
+##################################################################################
+# 
 variable "control_plane_url" {
   type        = string
   description = "URL of the TrueFoundry control plane (e.g., 'https://app.truefoundry.com')"
@@ -24,14 +27,28 @@ variable "cluster_type" {
   }
 }
 
-# Operational Variables
 variable "always_update" {
   type        = bool
   description = "Forces cluster configuration updates on every terraform apply, even without changes. Use with caution as it may cause unnecessary updates."
   default     = false
 }
 
-# AWS-specific Configuration
+variable "stdout_log_file" {
+  type        = string
+  description = "Log file of stdout"
+  default     = "truefoundry-cluster.stdout"
+}
+
+variable "stderr_log_file" {
+  type        = string
+  description = "Log file of stdout"
+  default     = "truefoundry-cluster.stderr"
+}
+
+##################################################################################
+## AWS
+##################################################################################
+# 
 variable "aws_account_id" {
   type        = string
   description = "AWS Account ID where the EKS cluster will be created (e.g., '123456789012')"
@@ -70,7 +87,6 @@ variable "aws_platform_features_role_arn" {
   default     = null
 }
 
-# AWS Service Integration Options
 variable "aws_s3_enabled" {
   type        = bool
   description = "Enable AWS S3 integration for cluster storage capabilities"
@@ -107,7 +123,10 @@ variable "aws_cluster_integration_enabled" {
   default     = true
 }
 
-# Azure-specific Configuration
+##################################################################################
+## Azure
+##################################################################################
+# 
 variable "azure_subscription_id" {
   type        = string
   description = "Azure Subscription ID where the AKS cluster will be created (e.g., '12345678-1234-1234-1234-123456789012')"
@@ -126,7 +145,6 @@ variable "azure_cluster_integration_enabled" {
   default     = true
 }
 
-# Azure Authentication
 variable "azure_client_id" {
   type        = string
   description = "Azure Service Principal Client ID for authentication"
@@ -146,7 +164,6 @@ variable "azure_tenant_id" {
   default     = null
 }
 
-# Azure Container Registry Configuration
 variable "azure_acr_enabled" {
   type        = bool
   description = "Enable Azure Container Registry (ACR) integration for container image storage"
@@ -172,7 +189,6 @@ variable "azure_acr_login_server" {
   default     = null
 }
 
-# Azure Storage Configuration
 variable "azure_blob_storage_enabled" {
   type        = bool
   description = "Enable Azure Blob Storage integration for cluster storage capabilities"
@@ -192,14 +208,16 @@ variable "azure_blob_storage_root_url" {
   default     = null
 }
 
-# GCP-specific Configuration
+##################################################################################
+## GCP
+##################################################################################
+# 
 variable "gcp_project_id" {
   type        = string
   description = "GCP Project ID where the GKE cluster will be created"
   default     = null
 }
 
-# GCP Storage Configuration
 variable "gcp_artifact_registry_url" {
   type        = string
   description = "URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT_ID')"
@@ -229,6 +247,7 @@ variable "gcp_secrets_manager_enabled" {
   description = "Enable GCP Secrets Manager integration for secret management"
   default     = true
 }
+
 variable "gcp_container_registry_enabled" {
   type        = bool
   description = "Enable GCP Container Registry integration for container image storage"
