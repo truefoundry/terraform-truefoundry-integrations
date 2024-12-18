@@ -23,6 +23,7 @@ No modules.
 | Name | Type |
 |------|------|
 | [external_external.create_cluster](https://registry.terraform.io/providers/hashicorp/external/2.3.4/docs/data-sources/external) | data source |
+| [external_external.get_environment](https://registry.terraform.io/providers/hashicorp/external/2.3.4/docs/data-sources/external) | data source |
 
 ## Inputs
 
