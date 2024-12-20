@@ -93,15 +93,18 @@ function create_cluster() {
     
     local manifest=$(echo "$CLUSTER_CONFIG_BASE64" | base64 -d)
 
-    log_info "create_cluster:: cluster manifest ${manifest}"
+    log_info "create_cluster: cluster manifest ${manifest}"
     local response=$(make_request "PUT" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/" "${manifest}" "200,201") || \
         handle_error "create_cluster: Failed to create cluster"
     
+    log_info "create_cluster: Response $response"
+
     local cluster_id=$(echo "${response}" | jq -r '.id') || \
         handle_error "create_cluster: Failed to parse cluster response"
+    
+    log_info "create_cluster: Cluster ID $cluster_id"
 
-    [ -z "${cluster_id}" ] || [ "${cluster_id}" = "null" ] || \
-        handle_error "create_cluster: No cluster ID found in response"
+    [ -z "${cluster_id}" ] && handle_error "create_cluster: No cluster ID found in response" && return 1
 
     echo "${cluster_id}"
 }
@@ -117,8 +120,7 @@ function get_cluster_token() {
     local token=$(echo "${response}" | jq -r '.clusterToken') || \
         handle_error "Failed to parse cluster token response"
 
-    [ -z "${token}" ] || [ "${token}" = "null" ] && \
-        handle_error "No cluster token found in response"
+    [ -z "${token}" ] && handle_error "No cluster token found in response" && return 1
     
     echo "${token}"
 }
