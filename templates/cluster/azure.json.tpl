@@ -13,7 +13,7 @@
         }
     ],
     "cluster_type": "${cluster_type}",
-    "environment_names": ["${env_name}", "prod"]
+    "environment_names": ["${env_name}"]
     %{ if container_registry_enabled },
     "default_registry_fqn": "${tenant_name}:${account_type}:${cluster_name}:docker-registry:registry"
     %{ endif }

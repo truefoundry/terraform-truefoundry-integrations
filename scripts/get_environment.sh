@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e -o pipefail
 # Read input from stdin (Terraform external data source)
 eval "$(jq -r '@sh "
 CONTROL_PLANE_URL=\(.control_plane_url)
