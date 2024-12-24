@@ -134,6 +134,18 @@ function setup_provider_account() {
     local provider_manifest=$(echo "$PROVIDER_CONFIG_BASE64" | base64 -d)
     
     log_info "setup_provider_account: provider account manifest ${provider_manifest}"
+    #use GET to check if provider account already exists
+    # check if cluster already exists
+    local response=$(make_request "GET" \
+        "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" \
+        "" "200") || handle_error "setup_provider_account: Failed to get cluster"
+
+    # if cluster exists, return
+    if [ -n "$response" ]; then
+        log_info "setup_provider_account: Cluster already exists"
+        return 0
+    fi
+
     local response=$(make_request "PUT" \
         "${CONTROL_PLANE_URL}/api/svc/v1/provider-accounts/" \
         "${provider_manifest}" \
