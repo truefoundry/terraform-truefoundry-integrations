@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e -o pipefail
 
 # Read input from stdin (Terraform external data source)
 eval "$(jq -r '@sh "
@@ -13,28 +13,27 @@ TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
 TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 "')"
 
-
-# Validate required parameters
-[ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required" && return 1
-[ -z "${API_KEY}" ] && handle_error "API_KEY is required" && return 1
-[ -z "${CLUSTER_NAME}" ] && handle_error "CLUSTER_NAME is required" && return 1
-[ -z "${CLUSTER_TYPE}" ] && handle_error "CLUSTER_TYPE is required" && return 1
+# Error handling
+function handle_error() {
+    local error_message="$1"
+    echo "[ERROR] $error_message" >&2
+    exit 1
+}
 
 # Logging functions
 function log_info() {
-    echo "[INFO] $1" >> $TRUEFOUNDRY_STDOUT_FILE
+    echo "[INFO] $1" >> "$TRUEFOUNDRY_STDOUT_FILE"
 }
 
 function log_error() {
-    echo "[ERROR] $1" >> $TRUEFOUNDRY_STDERR_FILE
+    echo "[ERROR] $1" >> "$TRUEFOUNDRY_STDERR_FILE"
 }
 
-# Error handling
-function handle_error() {
-    log_error "$1"
-    jq -n --arg error "$1" '{"error": $error}'
-    exit 1
-}
+# Validate required parameters
+[ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required"
+[ -z "${API_KEY}" ] && handle_error "API_KEY is required"
+[ -z "${CLUSTER_NAME}" ] && handle_error "CLUSTER_NAME is required"
+[ -z "${CLUSTER_TYPE}" ] && handle_error "CLUSTER_TYPE is required"
 
 # HTTP request handler
 function make_request() {
@@ -55,11 +54,11 @@ function make_request() {
     [ -n "$body" ] && curl_cmd="$curl_cmd -d '${body}'"
 
     # Execute request and capture response, redirect all output to stderr
-    eval "${curl_cmd} '${url}'" > "${response_file}" 2>&2
+    eval "${curl_cmd} '${url}'" > "${response_file}" 2>>"$TRUEFOUNDRY_STDERR_FILE"
     local curl_exit_code=$?
 
     # Get HTTP status code, redirect all output to stderr
-    eval "${curl_cmd} -o /dev/null -w '%{http_code}' '${url}'" > "${http_code_file}" 2>&2
+    eval "${curl_cmd} -o /dev/null -w '%{http_code}' '${url}'" > "${http_code_file}" 2>>"$TRUEFOUNDRY_STDERR_FILE"
     local http_code=$(<"${http_code_file}")
 
     # Cleanup
@@ -67,23 +66,28 @@ function make_request() {
 
     # Validate response
     if [ $curl_exit_code -ne 0 ]; then
+        local error_msg="Curl command failed with exit code: ${curl_exit_code}"
         rm -f "${response_file}"
+        handle_error "$error_msg"
         return 1
     fi
 
     if [[ ! ",$expected_status_codes," =~ ,"${http_code}", ]]; then
-        log_error "Request failed with status code: ${http_code}"
+        local error_msg="Request failed with status code: ${http_code}"
+        log_error "$error_msg"
         log_error "Response body:"
-        cat "${response_file}" >&2
+        cat "${response_file}" >> "$TRUEFOUNDRY_STDERR_FILE"
         rm -f "${response_file}"
+        handle_error "$error_msg"
         return 1
     fi
-
-    # Output response to stdout but only within a function call
+    
+    # Output response
     cat "${response_file}"
     rm -f "${response_file}"
     return 0
 }
+
 
 function is_cluster_provisioned() {
     log_info "is_cluster_provisioned: Checking if cluster exists and is provisioned..."
@@ -133,43 +137,45 @@ function is_cluster_provisioned() {
 function create_cluster() {
     log_info "create_cluster: Creating cluster..."
 
-    [-z "$CLUSTER_CONFIG_BASE64"] && handle_error "$CLUSTER_CONFIG_BASE64 is required" && return 1
+    [-z "$CLUSTER_CONFIG_BASE64"] && handle_error "CLUSTER_CONFIG_BASE64 is required" && return 1
 
     local manifest=$(echo "$CLUSTER_CONFIG_BASE64" | base64 -d)
+    [ $? -ne 0 ] && handle_error "Failed to decode CLUSTER_CONFIG_BASE64"
 
     log_info "create_cluster: cluster manifest ${manifest}"
-    local response=$(make_request "PUT" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/" "${manifest}" "200,201") || \
-        handle_error "create_cluster: Failed to create cluster"
+    
+    local response=$(make_request "PUT" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/" "${manifest}" "200,201")
+    [ $? -ne 0 ] && handle_error "Failed to create cluster"
 
     log_info "create_cluster: Response $response"
 
-    local cluster_id=$(echo "${response}" | jq -r '.id') || \
-        handle_error "create_cluster: Failed to parse cluster response"
+    local cluster_id=$(echo "${response}" | jq -r '.id')
+    [ $? -ne 0 ] && handle_error "Failed to parse cluster response"
+
 
     log_info "create_cluster: Cluster ID $cluster_id"
-
-    [ -z "${cluster_id}" ] && handle_error "create_cluster: No cluster ID found in response" && return 1
+    [ -z "${cluster_id}" ] && handle_error "No cluster ID found in response"
 
     echo "${cluster_id}"
 }
 
 function get_cluster_token() {
     local cluster_id="$1"
+    [ -z "$cluster_id" ] && handle_error "Cluster ID is required for token generation"
     log_info "get_cluster_token: Getting cluster token..."
 
     local response=$(make_request "GET" \
         "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${cluster_id}/token" \
-        "" "200") || handle_error "Failed to get cluster token"
-
-    local token=$(echo "${response}" | jq -r '.clusterToken') || \
-        handle_error "Failed to parse cluster token response"
-
+        "" "200")
+    [ $? -ne 0 ] && handle_error "Failed to get cluster token"
+    
+    local token=$(echo "${response}" | jq -r '.clusterToken')
+    [ $? -ne 0 ] && handle_error "Failed to parse cluster token response"
     [ -z "${token}" ] && handle_error "No cluster token found in response" && return 1
-
+    
     echo "${token}"
 }
 
-# Provider operations
 function setup_provider_account() {
     log_info "setup_provider_account: Starting provider account setup..."
 
@@ -210,41 +216,34 @@ function setup_provider_account() {
     return 0
 }
 
-# Main execution
 function main() {
-    # Capture all output in variables to prevent unwanted stdout
-    local environment_name
-    local cluster_manifest
-    local cluster_id
-    local cluster_token
-    local tenant_name
-
     # Verify platform health
     log_info "main: Checking platform health..."
-    make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || \
-        handle_error "Platform health check failed"
+    make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || handle_error "Platform health check failed"
 
     # Setup provider account if configured and cluster type is not generic
     if [ "${CLUSTER_TYPE}" != "generic" ]; then
         is_cluster_provisioned
     fi
 
-    cluster_id=$(create_cluster)
-    cluster_token=$(get_cluster_token "${cluster_id}")
+    local cluster_id
+    cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
+
+    local cluster_token
+    cluster_token=$(get_cluster_token "${cluster_id}") || handle_error "Failed to get cluster token"
 
     log_info "main: cluster_id=$cluster_id"
     log_info "main: cluster_token=$cluster_token"
 
-    # Output only the final JSON result to stdout
+    # Output the final JSON result to stdout
     jq -n \
         --arg cluster_id "$cluster_id" \
         --arg cluster_token "$cluster_token" \
         '{
             cluster_id: $cluster_id,
-            cluster_token: $cluster_token,
+            cluster_token: $cluster_token
         }'
 }
 
-# Execute main function and ensure only JSON output goes to stdout
-output=$(main)
-echo "$output"
+# Execute main function directly
+main
