@@ -100,11 +100,9 @@ function is_cluster_provisioned() {
         handle_error "is_cluster_provisioned: Failed to check cluster status"
         return 1
     }
-    echo "is_cluster_provisioned: $response"
     # Check if the request was successful
     local provisioned
     provisioned=$(echo "$response" | jq -r '.provisioned')
-    echo "provisioned: $provisioned"
     if [ "$provisioned" == "true" ]; then
         log_info "is_cluster_provisioned: Cluster is already provisioned."
         return 0
