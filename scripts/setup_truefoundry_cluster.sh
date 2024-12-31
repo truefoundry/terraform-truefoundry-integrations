@@ -12,10 +12,6 @@ PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
 TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
 TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 "')"
-
-TRUEFOUNDRY_STDOUT_FILE=${TRUEFOUNDRY_STDOUT_FILE:-"stdout"}
-TRUEFOUNDRY_STDERR_FILE=${TRUEFOUNDRY_STDERR_FILE:-"stderr"}
-
 # Error handling
 function handle_error() {
     local error_message="$1"
