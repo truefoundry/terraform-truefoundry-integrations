@@ -96,19 +96,21 @@ function is_cluster_provisioned() {
     log_info "is_cluster_provisioned: Checking if cluster exists and is provisioned..."
 
     # Make GET request to check cluster status
-    local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200,400")|| {
-        handle_error "is_cluster_provisioned: Failed to check cluster status"
-        return 1
+    local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200,400") || {
+        log_info "is_cluster_provisioned: Cluster does not exist"
+        echo "false"
+        return 0
     }
+    
     # Check if the request was successful
     local provisioned
     provisioned=$(echo "$response" | jq -r '.provisioned')
     if [ "$provisioned" == "true" ]; then
         log_info "is_cluster_provisioned: Cluster is already provisioned."
-        return 0
+        echo "true"
     else
         log_info "is_cluster_provisioned: Cluster exists but is not provisioned."
-        return 2
+        echo "false"
     fi
 }
 
@@ -163,11 +165,6 @@ function setup_provider_account() {
         return 1
     fi
 
-    if [ -z "$API_KEY" ] || [ -z "$CONTROL_PLANE_URL" ]; then
-        handle_error "setup_provider_account: API_KEY and CONTROL_PLANE_URL must be set"
-        return 1
-    fi
-
     log_info "setup_provider_account: Creating provider account..."
 
     # Decode the provider configuration
@@ -204,15 +201,15 @@ function main() {
 
     # Check if cluster exists and is provisioned
     if [ "${CLUSTER_TYPE}" != "generic" ]; then
-        is_cluster_provisioned
-        local cluster_status=$?
+        local cluster_status=$(is_cluster_provisioned)
+        log_info "main: Cluster status: ${cluster_status}"
         
-        if [ $cluster_status -eq 0 ]; then
+        if [ "${cluster_status}" = "true" ]; then
             log_info "main: Cluster already exists and is provisioned. Skipping creation."
             # Get existing cluster ID from the response
             cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.id')
         else
-            # Setup provider account and create cluster if not provisioned
+            # Setup provider account and create cluster if not provisioned or doesn't exist
             setup_provider_account || handle_error "Failed to setup provider account"
             cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
         fi
