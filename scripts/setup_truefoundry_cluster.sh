@@ -2,16 +2,17 @@
 set -e -o pipefail
 
 # Read input from stdin (Terraform external data source)
-# eval "$(jq -r '@sh "
-# CONTROL_PLANE_URL=\(.control_plane_url)
-# API_KEY=\(.api_key)
-# CLUSTER_NAME=\(.cluster_name)
-# CLUSTER_TYPE=\(.cluster_type)
-# CLUSTER_CONFIG_BASE64=\(.cluster_config_base64)
-# PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
-# TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
-# TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
-# "')"
+eval "$(jq -r '@sh "
+CONTROL_PLANE_URL=\(.control_plane_url)
+API_KEY=\(.api_key)
+CLUSTER_NAME=\(.cluster_name)
+CLUSTER_TYPE=\(.cluster_type)
+CLUSTER_CONFIG_BASE64=\(.cluster_config_base64)
+PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
+TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
+TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
+"')"
+
 TRUEFOUNDRY_STDOUT_FILE=${TRUEFOUNDRY_STDOUT_FILE:-"stdout"}
 TRUEFOUNDRY_STDERR_FILE=${TRUEFOUNDRY_STDERR_FILE:-"stderr"}
 
