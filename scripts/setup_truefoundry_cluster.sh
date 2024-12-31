@@ -2,16 +2,18 @@
 set -e -o pipefail
 
 # Read input from stdin (Terraform external data source)
-eval "$(jq -r '@sh "
-CONTROL_PLANE_URL=\(.control_plane_url)
-API_KEY=\(.api_key)
-CLUSTER_NAME=\(.cluster_name)
-CLUSTER_TYPE=\(.cluster_type)
-CLUSTER_CONFIG_BASE64=\(.cluster_config_base64)
-PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
-TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
-TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
-"')"
+# eval "$(jq -r '@sh "
+# CONTROL_PLANE_URL=\(.control_plane_url)
+# API_KEY=\(.api_key)
+# CLUSTER_NAME=\(.cluster_name)
+# CLUSTER_TYPE=\(.cluster_type)
+# CLUSTER_CONFIG_BASE64=\(.cluster_config_base64)
+# PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
+# TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
+# TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
+# "')"
+TRUEFOUNDRY_STDOUT_FILE=${TRUEFOUNDRY_STDOUT_FILE:-"stdout"}
+TRUEFOUNDRY_STDERR_FILE=${TRUEFOUNDRY_STDERR_FILE:-"stderr"}
 
 # Error handling
 function handle_error() {
@@ -92,52 +94,29 @@ function make_request() {
 function is_cluster_provisioned() {
     log_info "is_cluster_provisioned: Checking if cluster exists and is provisioned..."
 
-    # Validate prerequisites
-    if [ -z "$API_KEY" ] || [ -z "$CONTROL_PLANE_URL" ]; then
-        log_error "is_cluster_provisioned: API_KEY or CONTROL_PLANE_URL is not set."
-        return 1
-    fi
-
     # Make GET request to check cluster status
-    local response=$(mktemp)
-    local http_status=$(curl -s -o "$response" -w "%{http_code}" \
-        -H "Accept: application/json" \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer ${API_KEY}" \
-        "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}")
-
-    # Read the response body
-    local http_body
-    http_body=$(cat "$response")
-    rm "$response"
-
+    local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200,400")|| {
+        handle_error "is_cluster_provisioned: Failed to check cluster status"
+        return 1
+    }
+    echo "is_cluster_provisioned: $response"
     # Check if the request was successful
-    if [ "$http_status" = "200" ]; then
-        local provisioned
-        provisioned=$(echo "$http_body" | jq -r '.provisioned')
-        if [ "$provisioned" == "true" ]; then
-            log_info "is_cluster_provisioned: Cluster is already provisioned."
-            return 0
-        else
-            log_info "is_cluster_provisioned: Cluster exists but is not provisioned."
-            setup_provider_account || {
-              log_error "is_cluster_provisioned: Failed to provision the cluster."
-              return 1
-            }
-        fi
-    elif [ "$http_status" = "400" ]; then
-        log_error "is_cluster_provisioned: Cluster not found."
-        return 1
+    local provisioned
+    provisioned=$(echo "$response" | jq -r '.provisioned')
+    echo "provisioned: $provisioned"
+    if [ "$provisioned" == "true" ]; then
+        log_info "is_cluster_provisioned: Cluster is already provisioned."
+        return 0
     else
-        log_error "is_cluster_provisioned: Failed to check cluster status. HTTP status: $http_status"
-        return 1
+        log_info "is_cluster_provisioned: Cluster exists but is not provisioned."
+        return 2
     fi
 }
 
 function create_cluster() {
     log_info "create_cluster: Creating cluster..."
 
-    [-z "$CLUSTER_CONFIG_BASE64"] && handle_error "CLUSTER_CONFIG_BASE64 is required" && return 1
+    [ -z "$CLUSTER_CONFIG_BASE64" ] && handle_error "CLUSTER_CONFIG_BASE64 is required" && return 1
 
     local manifest=$(echo "$CLUSTER_CONFIG_BASE64" | base64 -d)
     [ $? -ne 0 ] && handle_error "Failed to decode CLUSTER_CONFIG_BASE64"
@@ -221,15 +200,27 @@ function main() {
     log_info "main: Checking platform health..."
     make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || handle_error "Platform health check failed"
 
-    # Setup provider account if configured and cluster type is not generic
+    local cluster_id
+    local cluster_token
+
+    # Check if cluster exists and is provisioned
     if [ "${CLUSTER_TYPE}" != "generic" ]; then
         is_cluster_provisioned
+        local cluster_status=$?
+        
+        if [ $cluster_status -eq 0 ]; then
+            log_info "main: Cluster already exists and is provisioned. Skipping creation."
+            # Get existing cluster ID from the response
+            cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.id')
+        else
+            # Setup provider account and create cluster if not provisioned
+            setup_provider_account || handle_error "Failed to setup provider account"
+            cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
+        fi
+    else
+        cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
     fi
 
-    local cluster_id
-    cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
-
-    local cluster_token
     cluster_token=$(get_cluster_token "${cluster_id}") || handle_error "Failed to get cluster token"
 
     log_info "main: cluster_id=$cluster_id"
