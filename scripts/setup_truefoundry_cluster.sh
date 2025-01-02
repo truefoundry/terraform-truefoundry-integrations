@@ -93,8 +93,7 @@ function is_cluster_provisioned() {
 
     # Make GET request to check cluster status
     local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200") || {
-        log_info "is_cluster_provisioned: Got error while querying for cluster ${CLUSTER_NAME}"
-        echo "false"
+        log_info "is_cluster_provisioned: Cluster doesn't exist, creating ${CLUSTER_NAME} in control plane"
         return 0
     }
     
@@ -103,10 +102,8 @@ function is_cluster_provisioned() {
     provisioned=$(echo "$response" | jq -r '.provisioned')
     if [ "$provisioned" == "true" ]; then
         log_info "is_cluster_provisioned: Cluster is already provisioned."
-        echo "true"
     else
         log_info "is_cluster_provisioned: Cluster exists but is not provisioned."
-        echo "false"
     fi
 }
 
@@ -156,10 +153,8 @@ function setup_provider_account() {
     log_info "setup_provider_account: Starting provider account setup..."
 
     # Ensure required environment variables are set
-    if [ -z "$PROVIDER_CONFIG_BASE64" ]; then
-        handle_error "setup_provider_account: PROVIDER_CONFIG_BASE64 is required"
-        return 1
-    fi
+    [ -z "$PROVIDER_CONFIG_BASE64" ] && handle_error "setup_provider_account: PROVIDER_CONFIG_BASE64 is required"
+    
 
     log_info "setup_provider_account: Creating provider account..."
 
