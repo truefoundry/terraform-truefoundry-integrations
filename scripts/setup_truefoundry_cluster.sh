@@ -92,8 +92,8 @@ function is_cluster_provisioned() {
     log_info "is_cluster_provisioned: Checking if cluster exists and is provisioned..."
 
     # Make GET request to check cluster status
-    local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200,400") || {
-        log_info "is_cluster_provisioned: Cluster does not exist"
+    local response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200") || {
+        log_info "is_cluster_provisioned: Got error while querying for cluster ${CLUSTER_NAME}"
         echo "false"
         return 0
     }
@@ -196,22 +196,23 @@ function main() {
     local cluster_token
 
     # Check if cluster exists and is provisioned
-    if [ "${CLUSTER_TYPE}" != "generic" ]; then
         local cluster_status=$(is_cluster_provisioned)
         log_info "main: Cluster status: ${cluster_status}"
         
-        if [ "${cluster_status}" = "true" ]; then
+    if [ "${cluster_status}" = "true" ]; then
             log_info "main: Cluster already exists and is provisioned. Skipping creation."
             # Get existing cluster ID from the response
             cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.id')
-        else
+    else
+        if [ "${CLUSTER_TYPE}" != "generic" ]; then
             # Setup provider account and create cluster if not provisioned or doesn't exist
             setup_provider_account || handle_error "Failed to setup provider account"
             cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
+        else
+            cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
         fi
-    else
-        cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
     fi
+
 
     cluster_token=$(get_cluster_token "${cluster_id}") || handle_error "Failed to get cluster token"
 
