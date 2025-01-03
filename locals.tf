@@ -78,6 +78,7 @@ locals {
     "aws-eks"          = "${path.module}/templates/cluster/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/cluster/azure.json.tpl"
     "gcp-gke-standard" = "${path.module}/templates/cluster/gcp.json.tpl"
+    "generic"          = "${path.module}/templates/cluster/generic.json.tpl"
   }
 
   # AWS provider configuration

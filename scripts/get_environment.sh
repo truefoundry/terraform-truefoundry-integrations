@@ -10,11 +10,11 @@ TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 
 # Logging functions
 function log_info() {
-    echo "get_environment_name.sh - [INFO] - $1" >> $TRUEFOUNDRY_STDOUT_FILE
+    echo "get_environment_name.sh - [INFO] - $1" >> "$TRUEFOUNDRY_STDOUT_FILE"
 }
 
 function log_error() {
-    echo "get_environment_name.sh - [ERROR] - $1" >> $TRUEFOUNDRY_STDERR_FILE
+    echo "get_environment_name.sh - [ERROR] - $1" >> "$TRUEFOUNDRY_STDERR_FILE"
 }
 
 # Error handling
@@ -30,9 +30,9 @@ function handle_error() {
 [ -z "${TRUEFOUNDRY_STDERR_FILE}" ] && handle_error "TRUEFOUNDRY_STDERR_FILE is required"
 
 
-echo "" > $TRUEFOUNDRY_STDOUT_FILE
-echo "" > $TRUEFOUNDRY_STDERR_FILE
-log_info "Starting script ....\n" >> $TRUEFOUNDRY_STDOUT_FILE
+echo "" > "$TRUEFOUNDRY_STDOUT_FILE"
+echo "" > "$TRUEFOUNDRY_STDERR_FILE"
+log_info "Starting script ....\n" >> "$TRUEFOUNDRY_STDOUT_FILE"
 
 function make_request() {
     local method="$1"
@@ -144,4 +144,4 @@ function main() {
 
 output=$(main)
 echo "$output"
-log_info "Completed script ..." >> $TRUEFOUNDRY_STDOUT_FILE
+log_info "Completed script ..." >> "$TRUEFOUNDRY_STDOUT_FILE"
