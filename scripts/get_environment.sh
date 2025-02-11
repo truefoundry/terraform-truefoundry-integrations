@@ -106,7 +106,7 @@ function get_environment_name() {
     local env_response=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/environment/" "" "200,201") || \
         handle_error "get_environment_name: Failed to get environment names"
 
-    local environment_name=$(echo "${env_response}" | jq -r '.[0].name') || \
+    local environment_name=$(echo "${env_response}" | jq -r '.data[0].name') || \
         handle_error "get_environment_name: Failed to parse environment response"
 
     [ -z "${environment_name}" ] || [ "${environment_name}" = "null" ] && \
