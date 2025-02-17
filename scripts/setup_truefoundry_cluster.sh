@@ -104,6 +104,8 @@ function is_cluster_provisioned() {
     else
         log_info "is_cluster_provisioned: Cluster exists but is not provisioned."
     fi
+    
+    echo "${provisioned}"
 }
 
 function create_cluster() {
