@@ -98,7 +98,7 @@ function is_cluster_provisioned() {
 
     # Check if the request was successful
     local provisioned
-    provisioned=$(echo "$response" | jq -r '.provisioned')
+    provisioned=$(echo "$response" | jq -r '.data.provisioned')
     if [ "$provisioned" == "true" ]; then
         log_info "is_cluster_provisioned: Cluster is already provisioned."
     else
@@ -123,7 +123,7 @@ function create_cluster() {
 
     log_info "create_cluster: Response $response"
 
-    local cluster_id=$(echo "${response}" | jq -r '.id')
+    local cluster_id=$(echo "${response}" | jq -r '.data.id')
     [ $? -ne 0 ] && handle_error "Failed to parse cluster response"
 
     log_info "create_cluster: Cluster ID $cluster_id"
@@ -196,7 +196,7 @@ function main() {
     if [ "${cluster_status}" = "true" ]; then
         log_info "main: Cluster already exists and is provisioned. Skipping creation."
         # Get existing cluster ID from the response
-        cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.id')
+        cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.data.id')
     else
         if [ "${CLUSTER_TYPE}" != "generic" ]; then
             # Setup provider account and create cluster if not provisioned or doesn't exist
