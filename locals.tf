@@ -64,7 +64,7 @@ locals {
   }
 
   # Select appropriate configuration based on cluster type
-  provider_account_config = var.cluster_type == "generic" ? "" : templatefile(
+  provider_account_config = templatefile(
     local.provider_account_template[var.cluster_type],
     var.cluster_type == "aws-eks" ? local.aws_provider_account_config : (
       var.cluster_type == "azure-aks" ? local.azure_provider_account_config : (
@@ -78,7 +78,6 @@ locals {
     "aws-eks"          = "${path.module}/templates/cluster/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/cluster/azure.json.tpl"
     "gcp-gke-standard" = "${path.module}/templates/cluster/gcp.json.tpl"
-    "generic"          = "${path.module}/templates/cluster/generic.json.tpl"
   }
 
   # AWS provider configuration
@@ -114,18 +113,11 @@ locals {
     cluster_integration_enabled = var.gcp_cluster_integration_enabled
   }
 
-  generic_cluster_config = {
-    cluster_name = var.cluster_name
-    cluster_type = "generic"
-    env_name     = data.external.get_environment.result.environment_name
-    tenant_name  = data.external.get_environment.result.tenant_name
-  }
-
   cluster_config = templatefile(
     local.cluster_template[var.cluster_type],
     var.cluster_type == "aws-eks" ? local.aws_cluster_config : (
       var.cluster_type == "azure-aks" ? local.azure_cluster_config : (
-        var.cluster_type == "gcp-gke-standard" ? local.gcp_cluster_config : local.generic_cluster_config
+        var.cluster_type == "gcp-gke-standard" ? local.gcp_cluster_config : null
       )
     )
   )
