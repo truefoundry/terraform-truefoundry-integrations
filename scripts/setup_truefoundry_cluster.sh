@@ -198,13 +198,9 @@ function main() {
         # Get existing cluster ID from the response
         cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.data.id')
     else
-        if [ "${CLUSTER_TYPE}" != "generic" ]; then
-            # Setup provider account and create cluster if not provisioned or doesn't exist
-            setup_provider_account || handle_error "Failed to setup provider account"
-            cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
-        else
-            cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
-        fi
+        # Setup provider account and create cluster if not provisioned or doesn't exist
+        setup_provider_account || handle_error "Failed to setup provider account"
+        cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
     fi
 
     cluster_token=$(get_cluster_token "${cluster_id}") || handle_error "Failed to get cluster token"

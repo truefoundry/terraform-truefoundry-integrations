@@ -56,7 +56,7 @@ No modules.
 | <a name="input_azure_subscription_id"></a> [azure\_subscription\_id](#input\_azure\_subscription\_id) | Azure Subscription ID where the AKS cluster will be created (e.g., '12345678-1234-1234-1234-123456789012') | `string` | `null` | no |
 | <a name="input_azure_tenant_id"></a> [azure\_tenant\_id](#input\_azure\_tenant\_id) | Azure Tenant ID associated with the subscription | `string` | `null` | no |
 | <a name="input_cluster_name"></a> [cluster\_name](#input\_cluster\_name) | Name of the Kubernetes cluster to create or manage. Must be unique within your organization. | `string` | n/a | yes |
-| <a name="input_cluster_type"></a> [cluster\_type](#input\_cluster\_type) | Type of cluster to create (aws-eks, azure-aks, gcp-gke-standard, generic) | `string` | n/a | yes |
+| <a name="input_cluster_type"></a> [cluster\_type](#input\_cluster\_type) | Type of cluster to create (aws-eks, azure-aks, gcp-gke-standard) | `string` | n/a | yes |
 | <a name="input_control_plane_url"></a> [control\_plane\_url](#input\_control\_plane\_url) | URL of the TrueFoundry control plane (e.g., 'https://app.truefoundry.com') | `string` | n/a | yes |
 | <a name="input_gcp_artifact_registry_url"></a> [gcp\_artifact\_registry\_url](#input\_gcp\_artifact\_registry\_url) | URL for GCP Artifact Registry (e.g., 'LOCATION-docker.pkg.dev/PROJECT\_ID') | `string` | `null` | no |
 | <a name="input_gcp_blob_storage_enabled"></a> [gcp\_blob\_storage\_enabled](#input\_gcp\_blob\_storage\_enabled) | Enable GCP Blob Storage integration for cluster storage capabilities | `bool` | `true` | no |
