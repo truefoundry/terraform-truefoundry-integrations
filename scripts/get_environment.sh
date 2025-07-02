@@ -4,6 +4,7 @@ set -e -o pipefail
 eval "$(jq -r '@sh "
 CONTROL_PLANE_URL=\(.control_plane_url)
 API_KEY=\(.api_key)
+TENANT_NAME=\(.tenant_name)
 TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
 TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 "')"
@@ -26,6 +27,7 @@ function handle_error() {
 
 [ -z "${CONTROL_PLANE_URL}" ] && handle_error "CONTROL_PLANE_URL is required"
 [ -z "${API_KEY}" ] && handle_error "API_KEY is required"
+[ -z "${TENANT_NAME}" ] && handle_error "TENANT_NAME is required"
 [ -z "${TRUEFOUNDRY_STDOUT_FILE}" ] && handle_error "TRUEFOUNDRY_STDOUT_FILE is required"
 [ -z "${TRUEFOUNDRY_STDERR_FILE}" ] && handle_error "TRUEFOUNDRY_STDERR_FILE is required"
 
@@ -82,24 +84,6 @@ function make_request() {
     return 0
 }
 
-# Tenant operations
-function get_tenant_name() {
-    log_info "get_tenant_name: Getting tenant name..."
-    local hostname=$(echo "$CONTROL_PLANE_URL" | awk -F[/:] '{print $4}')
-    
-    local response=$(make_request "GET" \
-        "${CONTROL_PLANE_URL}/api/auth/api/v1/tenant-config/public?hostName=${hostname}" \
-        "" "200,201") || handle_error "Failed to get tenant config"
-    
-    local tenant_name=$(echo "${response}" | jq -r '.tenantName') || \
-        handle_error "Failed to parse tenant config response"
-
-    [ -z "${tenant_name}" ] || [ "${tenant_name}" = "null" ] && \
-        handle_error "No tenant name found in response"
-    
-    echo "${tenant_name}"
-}
-
 
 function get_environment_name() {
     log_info "get_environment_name: Getting environment names..."
@@ -128,14 +112,13 @@ function main() {
     environment_name=$(get_environment_name)
     log_info "main: Environment name: ${environment_name}"
 
-    # Get tenant details
-    tenant_name=$(get_tenant_name)
-    log_info "main: Tenant name: ${tenant_name}"
+    # Use provided tenant name
+    log_info "main: Tenant name: ${TENANT_NAME}"
         
     # Output only the final JSON result to stdout
     jq -n \
         --arg environment_name "$environment_name" \
-        --arg tenant_name "$tenant_name" \
+        --arg tenant_name "$TENANT_NAME" \
         '{
             environment_name: $environment_name,
             tenant_name: $tenant_name
