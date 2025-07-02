@@ -6,6 +6,7 @@ data "external" "get_environment" {
   query = {
     control_plane_url = var.control_plane_url
     api_key           = var.tfy_api_key
+    tenant_name       = var.tenant_name
     stdout_log_file   = var.stdout_log_file
     stderr_log_file   = var.stderr_log_file
     always_update     = var.always_update ? timestamp() : "initial"

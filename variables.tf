@@ -265,3 +265,9 @@ variable "gcp_sa_auth_data" {
   description = "GCP Service Account auth_data"
   default     = null
 }
+
+variable "tenant_name" {
+  type        = string
+  description = "Name of the tenant"
+  default     = null
+}
