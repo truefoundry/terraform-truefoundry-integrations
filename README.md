@@ -69,6 +69,7 @@ No modules.
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
 | <a name="input_stderr_log_file"></a> [stderr\_log\_file](#input\_stderr\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stderr"` | no |
 | <a name="input_stdout_log_file"></a> [stdout\_log\_file](#input\_stdout\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stdout"` | no |
+| <a name="input_tenant_name"></a> [tenant\_name](#input\_tenant\_name) | Name of the tenant | `string` | `null` | no |
 | <a name="input_tfy_api_key"></a> [tfy\_api\_key](#input\_tfy\_api\_key) | TrueFoundry API key for authentication. Can be obtained from the TrueFoundry console. | `string` | n/a | yes |
 
 ## Outputs
