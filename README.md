@@ -67,7 +67,7 @@ No modules.
 | <a name="input_gcp_sa_auth_data"></a> [gcp\_sa\_auth\_data](#input\_gcp\_sa\_auth\_data) | GCP Service Account auth\_data | `string` | `null` | no |
 | <a name="input_gcp_secrets_manager_enabled"></a> [gcp\_secrets\_manager\_enabled](#input\_gcp\_secrets\_manager\_enabled) | Enable GCP Secrets Manager integration for secret management | `bool` | `true` | no |
 | <a name="input_gcp_service_account_enabled"></a> [gcp\_service\_account\_enabled](#input\_gcp\_service\_account\_enabled) | Enable GCP Service Account integration for authentication | `bool` | `true` | no |
-| <a name="input_gcp_service_account_key_enabled"></a> [gcp\_service\_account\_key\_enabled](#input\_gcp\_service\_account\_key\_enabled) | Enable GCP Service Account key for authentication | `bool` | `null` | no |
+| <a name="input_gcp_service_account_key_enabled"></a> [gcp\_service\_account\_key\_enabled](#input\_gcp\_service\_account\_key\_enabled) | Enable GCP Service Account key for authentication | `bool` | n/a | yes |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
 | <a name="input_stderr_log_file"></a> [stderr\_log\_file](#input\_stderr\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stderr"` | no |
 | <a name="input_stdout_log_file"></a> [stdout\_log\_file](#input\_stdout\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stdout"` | no |
