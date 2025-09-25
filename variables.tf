@@ -224,6 +224,19 @@ variable "gcp_artifact_registry_url" {
   default     = null
 }
 
+variable "gcp_service_account_enabled" {
+  type        = bool
+  description = "Enable GCP Service Account integration for authentication"
+  default     = true
+}
+
+variable "gcp_service_account_key_enabled" {
+  type        = bool
+  description = "Enable GCP Service Account key for authentication"
+  sensitive   = true
+  default     = null
+}
+
 variable "gcp_storage_bucket_url" {
   type        = string
   description = "URL for GCP Storage bucket (e.g., 'gs://bucket-name')"
@@ -270,10 +283,4 @@ variable "tenant_name" {
   type        = string
   description = "Name of the tenant"
   default     = null
-}
-
-variable "provider_integration_enabled" {
-  type        = bool
-  description = "Enable provider integration"
-  default     = true
 }

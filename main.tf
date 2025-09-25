@@ -21,7 +21,7 @@ data "external" "create_cluster" {
     api_key                      = var.tfy_api_key
     cluster_name                 = var.cluster_name
     cluster_type                 = var.cluster_type
-    provider_integration_enabled = var.provider_integration_enabled
+    provider_integration_enabled = local.provider_integration_enabled
     cluster_config_base64        = base64encode(local.cluster_config)
     provider_config_base64       = base64encode(local.provider_account_config)
     stdout_log_file              = var.stdout_log_file

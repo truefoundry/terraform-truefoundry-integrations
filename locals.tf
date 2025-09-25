@@ -1,4 +1,6 @@
 locals {
+
+  provider_integration_enabled = var.cluster_type == "gcp-gke-standard" ? var.gcp_service_account_key_enabled && var.gcp_service_account_enabled : true
   provider_account_template = {
     "aws-eks"          = "${path.module}/templates/provider-account/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/provider-account/azure.json.tpl"
@@ -89,7 +91,7 @@ locals {
     account_type                 = "aws"
     container_registry_enabled   = var.aws_ecr_enabled
     cluster_integration_enabled  = var.aws_cluster_integration_enabled
-    provider_integration_enabled = var.provider_integration_enabled
+    provider_integration_enabled = local.provider_integration_enabled
   }
 
   # Azure provider configuration
@@ -112,7 +114,7 @@ locals {
     account_type                 = "gcp"
     container_registry_enabled   = var.gcp_container_registry_enabled
     cluster_integration_enabled  = var.gcp_cluster_integration_enabled
-    provider_integration_enabled = var.provider_integration_enabled
+    provider_integration_enabled = local.provider_integration_enabled
   }
 
   cluster_config = templatefile(
