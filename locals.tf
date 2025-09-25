@@ -1,4 +1,6 @@
 locals {
+
+  provider_integration_enabled = var.cluster_type == "gcp-gke-standard" ? var.gcp_service_account_key_enabled && var.gcp_service_account_enabled : true
   provider_account_template = {
     "aws-eks"          = "${path.module}/templates/provider-account/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/provider-account/azure.json.tpl"
@@ -82,13 +84,14 @@ locals {
 
   # AWS provider configuration
   aws_cluster_config = {
-    cluster_name                = var.cluster_name
-    cluster_type                = "aws-eks"
-    env_name                    = data.external.get_environment.result.environment_name
-    tenant_name                 = data.external.get_environment.result.tenant_name
-    account_type                = "aws"
-    container_registry_enabled  = var.aws_ecr_enabled
-    cluster_integration_enabled = var.aws_cluster_integration_enabled
+    cluster_name                 = var.cluster_name
+    cluster_type                 = "aws-eks"
+    env_name                     = data.external.get_environment.result.environment_name
+    tenant_name                  = data.external.get_environment.result.tenant_name
+    account_type                 = "aws"
+    container_registry_enabled   = var.aws_ecr_enabled
+    cluster_integration_enabled  = var.aws_cluster_integration_enabled
+    provider_integration_enabled = local.provider_integration_enabled
   }
 
   # Azure provider configuration
@@ -104,13 +107,14 @@ locals {
 
   # GCP provider configuration
   gcp_cluster_config = {
-    cluster_name                = var.cluster_name
-    cluster_type                = "gcp-gke-standard"
-    env_name                    = data.external.get_environment.result.environment_name
-    tenant_name                 = data.external.get_environment.result.tenant_name
-    account_type                = "gcp"
-    container_registry_enabled  = var.gcp_container_registry_enabled
-    cluster_integration_enabled = var.gcp_cluster_integration_enabled
+    cluster_name                 = var.cluster_name
+    cluster_type                 = "gcp-gke-standard"
+    env_name                     = data.external.get_environment.result.environment_name
+    tenant_name                  = data.external.get_environment.result.tenant_name
+    account_type                 = "gcp"
+    container_registry_enabled   = var.gcp_container_registry_enabled
+    cluster_integration_enabled  = var.gcp_cluster_integration_enabled
+    provider_integration_enabled = local.provider_integration_enabled
   }
 
   cluster_config = templatefile(

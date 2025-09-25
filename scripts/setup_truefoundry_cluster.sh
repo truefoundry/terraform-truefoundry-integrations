@@ -9,6 +9,7 @@ CLUSTER_NAME=\(.cluster_name)
 CLUSTER_TYPE=\(.cluster_type)
 CLUSTER_CONFIG_BASE64=\(.cluster_config_base64)
 PROVIDER_CONFIG_BASE64=\(.provider_config_base64)
+PROVIDER_INTEGRATION_ENABLED=\(.provider_integration_enabled)
 TRUEFOUNDRY_STDOUT_FILE=\(.stdout_log_file)
 TRUEFOUNDRY_STDERR_FILE=\(.stderr_log_file)
 "')"
@@ -33,6 +34,7 @@ function log_error() {
 [ -z "${API_KEY}" ] && handle_error "API_KEY is required"
 [ -z "${CLUSTER_NAME}" ] && handle_error "CLUSTER_NAME is required"
 [ -z "${CLUSTER_TYPE}" ] && handle_error "CLUSTER_TYPE is required"
+[ -z "${PROVIDER_INTEGRATION_ENABLED}" ] && handle_error "PROVIDER_INTEGRATION_ENABLED is required"
 
 # HTTP request handler
 function make_request() {
@@ -150,10 +152,16 @@ function get_cluster_token() {
 }
 
 function setup_provider_account() {
+    # Check if provider integration is enabled
+    if [ "${PROVIDER_INTEGRATION_ENABLED}" != "true" ]; then
+        log_info "setup_provider_account: Provider integration is disabled. Skipping provider account setup."
+        return 0
+    fi
+
     log_info "setup_provider_account: Starting provider account setup..."
 
-    # Ensure required environment variables are set
-    [ -z "$PROVIDER_CONFIG_BASE64" ] && handle_error "setup_provider_account: PROVIDER_CONFIG_BASE64 is required"
+    # Ensure required environment variables are set when provider integration is enabled
+    [ -z "$PROVIDER_CONFIG_BASE64" ] && handle_error "setup_provider_account: PROVIDER_CONFIG_BASE64 is required when provider integration is enabled"
 
     log_info "setup_provider_account: Creating provider account..."
 
@@ -182,6 +190,9 @@ function setup_provider_account() {
 }
 
 function main() {
+    # Log provider integration status
+    log_info "main: Provider integration enabled: ${PROVIDER_INTEGRATION_ENABLED}"
+    
     # Verify platform health
     log_info "main: Checking platform health..."
     make_request "GET" "${CONTROL_PLANE_URL}/api/svc/" "" "200" >/dev/null || handle_error "Platform health check failed"
@@ -198,7 +209,7 @@ function main() {
         # Get existing cluster ID from the response
         cluster_id=$(make_request "GET" "${CONTROL_PLANE_URL}/api/svc/v1/cluster/${CLUSTER_NAME}" "" "200" | jq -r '.data.id')
     else
-        # Setup provider account and create cluster if not provisioned or doesn't exist
+        # Setup provider account (only if provider integration is enabled)
         setup_provider_account || handle_error "Failed to setup provider account"
         cluster_id=$(create_cluster) || handle_error "Failed to create cluster"
     fi
