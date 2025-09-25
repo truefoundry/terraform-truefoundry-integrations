@@ -271,3 +271,9 @@ variable "tenant_name" {
   description = "Name of the tenant"
   default     = null
 }
+
+variable "provider_integration_enabled" {
+  type        = bool
+  description = "Enable provider integration"
+  default     = true
+}
