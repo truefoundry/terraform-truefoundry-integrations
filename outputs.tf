@@ -13,3 +13,7 @@ output "cluster_token" {
   value       = local.output_map["CLUSTER_TOKEN"]
   sensitive   = true
 }
+output "provider_integration_enabled" {
+  description = "Whether the provider integration is enabled"
+  value       = local.provider_integration_enabled
+}
