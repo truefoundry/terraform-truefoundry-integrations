@@ -34,6 +34,7 @@ No modules.
 | <a name="input_aws_cluster_integration_enabled"></a> [aws\_cluster\_integration\_enabled](#input\_aws\_cluster\_integration\_enabled) | Enable direct integration with AWS EKS cluster services | `bool` | `true` | no |
 | <a name="input_aws_ecr_enabled"></a> [aws\_ecr\_enabled](#input\_aws\_ecr\_enabled) | Enable AWS Elastic Container Registry (ECR) integration for container image storage | `bool` | `true` | no |
 | <a name="input_aws_parameter_store_enabled"></a> [aws\_parameter\_store\_enabled](#input\_aws\_parameter\_store\_enabled) | Enable AWS Systems Manager Parameter Store integration for secret management | `bool` | `true` | no |
+| <a name="input_aws_platform_features_iam_role_enabled"></a> [aws\_platform\_features\_iam\_role\_enabled](#input\_aws\_platform\_features\_iam\_role\_enabled) | Enable AWS IAM role-based authentication. If true, requires aws\_platform\_features\_role\_arn. | `bool` | `true` | no |
 | <a name="input_aws_platform_features_role_arn"></a> [aws\_platform\_features\_role\_arn](#input\_aws\_platform\_features\_role\_arn) | AWS IAM Role ARN for role-based authentication (e.g., 'arn:aws:iam::123456789012:role/TrueFoundryRole') | `string` | `null` | no |
 | <a name="input_aws_platform_features_user_access_key_id"></a> [aws\_platform\_features\_user\_access\_key\_id](#input\_aws\_platform\_features\_user\_access\_key\_id) | AWS IAM Access Key ID for user-based authentication. Required if aws\_platform\_features\_user\_enabled is true. | `string` | `null` | no |
 | <a name="input_aws_platform_features_user_enabled"></a> [aws\_platform\_features\_user\_enabled](#input\_aws\_platform\_features\_user\_enabled) | Enable AWS IAM user-based authentication. If true, requires aws\_platform\_features\_user\_access\_key\_id and aws\_platform\_features\_user\_secret\_access\_key. | `bool` | `false` | no |
@@ -67,7 +68,7 @@ No modules.
 | <a name="input_gcp_sa_auth_data"></a> [gcp\_sa\_auth\_data](#input\_gcp\_sa\_auth\_data) | GCP Service Account auth\_data | `string` | `null` | no |
 | <a name="input_gcp_secrets_manager_enabled"></a> [gcp\_secrets\_manager\_enabled](#input\_gcp\_secrets\_manager\_enabled) | Enable GCP Secrets Manager integration for secret management | `bool` | `true` | no |
 | <a name="input_gcp_service_account_enabled"></a> [gcp\_service\_account\_enabled](#input\_gcp\_service\_account\_enabled) | Enable GCP Service Account integration for authentication | `bool` | `true` | no |
-| <a name="input_gcp_service_account_key_enabled"></a> [gcp\_service\_account\_key\_enabled](#input\_gcp\_service\_account\_key\_enabled) | Enable GCP Service Account key for authentication | `bool` | n/a | yes |
+| <a name="input_gcp_service_account_key_enabled"></a> [gcp\_service\_account\_key\_enabled](#input\_gcp\_service\_account\_key\_enabled) | Enable GCP Service Account key for authentication | `bool` | `true` | no |
 | <a name="input_gcp_storage_bucket_url"></a> [gcp\_storage\_bucket\_url](#input\_gcp\_storage\_bucket\_url) | URL for GCP Storage bucket (e.g., 'gs://bucket-name') | `string` | `null` | no |
 | <a name="input_stderr_log_file"></a> [stderr\_log\_file](#input\_stderr\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stderr"` | no |
 | <a name="input_stdout_log_file"></a> [stdout\_log\_file](#input\_stdout\_log\_file) | Log file of stdout | `string` | `"truefoundry-cluster.stdout"` | no |
@@ -80,5 +81,6 @@ No modules.
 |------|-------------|
 | <a name="output_cluster_id"></a> [cluster\_id](#output\_cluster\_id) | The ID of the created cluster |
 | <a name="output_cluster_token"></a> [cluster\_token](#output\_cluster\_token) | The token for the cluster |
+| <a name="output_provider_integration_enabled"></a> [provider\_integration\_enabled](#output\_provider\_integration\_enabled) | Whether the provider integration is enabled |
 | <a name="output_tenant_name"></a> [tenant\_name](#output\_tenant\_name) | The name of the tenant |
 <!-- END_TF_DOCS -->
