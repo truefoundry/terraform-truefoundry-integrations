@@ -66,6 +66,11 @@ variable "aws_platform_features_user_enabled" {
   description = "Enable AWS IAM user-based authentication. If true, requires aws_platform_features_user_access_key_id and aws_platform_features_user_secret_access_key."
   default     = false
 }
+variable "aws_platform_features_iam_role_enabled" {
+  type        = bool
+  description = "Enable AWS IAM role-based authentication. If true, requires aws_platform_features_role_arn."
+  default     = true
+}
 
 variable "aws_platform_features_user_access_key_id" {
   type        = string
@@ -234,6 +239,7 @@ variable "gcp_service_account_key_enabled" {
   type        = bool
   description = "Enable GCP Service Account key for authentication"
   sensitive   = true
+  default     = true
 }
 
 variable "gcp_storage_bucket_url" {

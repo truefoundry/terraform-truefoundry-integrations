@@ -1,6 +1,8 @@
 locals {
 
-  provider_integration_enabled = var.cluster_type == "gcp-gke-standard" ? var.gcp_service_account_key_enabled && var.gcp_service_account_enabled : true
+  provider_integration_enabled = var.cluster_type == "gcp-gke-standard" ? var.gcp_service_account_key_enabled && var.gcp_service_account_enabled : (
+    var.cluster_type == "aws-eks" ? var.aws_platform_features_iam_role_enabled || var.aws_platform_features_user_enabled : true
+  )
   provider_account_template = {
     "aws-eks"          = "${path.module}/templates/provider-account/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/provider-account/azure.json.tpl"
@@ -14,10 +16,11 @@ locals {
     cloud_region     = var.aws_region
 
     // Auth related
-    platform_features_user_enabled    = var.aws_platform_features_user_enabled
-    platform_features_user_key_id     = var.aws_platform_features_user_access_key_id
-    platform_features_user_key_secret = var.aws_platform_features_user_secret_access_key
-    platform_features_role_arn        = var.aws_platform_features_role_arn
+    platform_features_user_enabled     = var.aws_platform_features_user_enabled
+    platform_features_user_key_id      = var.aws_platform_features_user_access_key_id
+    platform_features_user_key_secret  = var.aws_platform_features_user_secret_access_key
+    platform_features_iam_role_enabled = var.aws_platform_features_iam_role_enabled
+    platform_features_role_arn         = var.aws_platform_features_role_arn
 
     // Feature flags
     object_store_enabled        = var.aws_s3_enabled
