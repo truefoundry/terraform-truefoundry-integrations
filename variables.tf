@@ -238,7 +238,6 @@ variable "gcp_service_account_enabled" {
 variable "gcp_service_account_key_enabled" {
   type        = bool
   description = "Enable GCP Service Account key for authentication"
-  sensitive   = true
   default     = true
 }
 
