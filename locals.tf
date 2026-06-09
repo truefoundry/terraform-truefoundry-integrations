@@ -1,12 +1,18 @@
 locals {
 
   provider_integration_enabled = var.cluster_type == "gcp-gke-standard" ? var.gcp_service_account_key_enabled && var.gcp_service_account_enabled : (
-    var.cluster_type == "aws-eks" ? var.aws_platform_features_iam_role_enabled || var.aws_platform_features_user_enabled : true
+    var.cluster_type == "aws-eks" ? var.aws_platform_features_iam_role_enabled || var.aws_platform_features_user_enabled : (
+      # A generic (bring-your-own) cluster has no cloud provider account to wire,
+      # so provider integration is always off; the setup script then skips the
+      # provider-account PUT entirely.
+      var.cluster_type == "generic" ? false : true
+    )
   )
   provider_account_template = {
     "aws-eks"          = "${path.module}/templates/provider-account/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/provider-account/azure.json.tpl"
     "gcp-gke-standard" = "${path.module}/templates/provider-account/gcp.json.tpl"
+    "generic"          = "${path.module}/templates/provider-account/generic.json.tpl"
   }
 
   # AWS provider configuration
@@ -63,7 +69,9 @@ locals {
     bucket_url                  = var.gcp_storage_bucket_url
   }
 
-  # Default configuration
+  # Default / generic provider configuration. A generic cluster has no cloud
+  # provider account, so only cluster_name is templated; the rendered manifest
+  # is never PUT (provider_integration_enabled is false for generic).
   default_provider_account_config = {
     cluster_name = var.cluster_name
   }
@@ -83,6 +91,7 @@ locals {
     "aws-eks"          = "${path.module}/templates/cluster/aws.json.tpl"
     "azure-aks"        = "${path.module}/templates/cluster/azure.json.tpl"
     "gcp-gke-standard" = "${path.module}/templates/cluster/gcp.json.tpl"
+    "generic"          = "${path.module}/templates/cluster/generic.json.tpl"
   }
 
   # AWS provider configuration
@@ -120,11 +129,26 @@ locals {
     provider_integration_enabled = local.provider_integration_enabled
   }
 
+  # Generic (bring-your-own) cluster configuration. No cloud provider, so the
+  # registry / cluster-integration blocks in the manifest stay off.
+  generic_cluster_config = {
+    cluster_name                 = var.cluster_name
+    cluster_type                 = "generic"
+    env_name                     = data.external.get_environment.result.environment_name
+    tenant_name                  = data.external.get_environment.result.tenant_name
+    account_type                 = "generic"
+    container_registry_enabled   = false
+    cluster_integration_enabled  = false
+    provider_integration_enabled = local.provider_integration_enabled
+  }
+
   cluster_config = templatefile(
     local.cluster_template[var.cluster_type],
     var.cluster_type == "aws-eks" ? local.aws_cluster_config : (
       var.cluster_type == "azure-aks" ? local.azure_cluster_config : (
-        var.cluster_type == "gcp-gke-standard" ? local.gcp_cluster_config : null
+        var.cluster_type == "gcp-gke-standard" ? local.gcp_cluster_config : (
+          var.cluster_type == "generic" ? local.generic_cluster_config : null
+        )
       )
     )
   )
