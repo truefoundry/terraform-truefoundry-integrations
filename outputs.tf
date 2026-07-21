@@ -15,5 +15,6 @@ output "cluster_token" {
 }
 output "provider_integration_enabled" {
   description = "Whether the provider integration is enabled"
-  value       = local.provider_integration_enabled
+  # Unwrap: sensitivity is inherited from a gcp var via the locals ternary; value is just a bool flag.
+  value = nonsensitive(local.provider_integration_enabled)
 }
