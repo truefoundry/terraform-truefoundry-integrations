@@ -1,6 +1,10 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Dependency lock file (not committed for reusable modules)
+.terraform.lock.hcl
+**/.terraform.lock.hcl
+
 # .tfstate files
 *.tfstate
 *.tfstate.*

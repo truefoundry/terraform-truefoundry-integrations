@@ -2,12 +2,7 @@
     "manifest": {
     "name": "${cluster_name}",
     "type": "cluster",
-    "collaborators": [
-        {
-        "role_id": "cluster-admin",
-        "subject": "user:tfy-user@truefoundry.com"
-        }
-    ],
+    "collaborators": [],
     "cluster_type": "${cluster_type}",
     "environment_names": ["${env_name}"]
     %{ if provider_integration_enabled }
