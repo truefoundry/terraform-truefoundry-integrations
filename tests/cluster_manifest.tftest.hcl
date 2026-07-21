@@ -1,7 +1,8 @@
-# INFRA-1181: the cluster manifest must NOT carry a hardcoded `collaborators` block.
+# INFRA-1181: the cluster manifest must send an EMPTY `collaborators` list.
 # Server PR #10092 dropped the requirement for a cluster-admin collaborator; this module
 # previously hardcoded `user:tfy-user@truefoundry.com`, which left a stray cluster-admin
-# role-binding on every provisioned cluster.
+# role-binding on every provisioned cluster. The key stays required by the manifest schema
+# (empty array is valid), so we send [] rather than omitting it.
 #
 # Plan-only. The two `data "external"` sources run shell scripts (get_environment hits the
 # control-plane API, create_cluster PUTs the manifest), so both are stubbed via override_data —
@@ -65,8 +66,8 @@ run "aws_manifest_has_no_collaborators" {
   }
 
   assert {
-    condition     = lookup(jsondecode(local.cluster_config).manifest, "collaborators", null) == null
-    error_message = "aws cluster manifest must not contain a collaborators key"
+    condition     = jsondecode(local.cluster_config).manifest.collaborators == []
+    error_message = "aws cluster manifest collaborators must be an empty list"
   }
 
   assert {
@@ -99,8 +100,8 @@ run "gcp_manifest_has_no_collaborators" {
   }
 
   assert {
-    condition     = lookup(jsondecode(local.cluster_config).manifest, "collaborators", null) == null
-    error_message = "gcp cluster manifest must not contain a collaborators key"
+    condition     = jsondecode(local.cluster_config).manifest.collaborators == []
+    error_message = "gcp cluster manifest collaborators must be an empty list"
   }
 
   assert {
@@ -126,8 +127,8 @@ run "azure_manifest_has_no_collaborators" {
   }
 
   assert {
-    condition     = lookup(jsondecode(local.cluster_config).manifest, "collaborators", null) == null
-    error_message = "azure cluster manifest must not contain a collaborators key"
+    condition     = jsondecode(local.cluster_config).manifest.collaborators == []
+    error_message = "azure cluster manifest collaborators must be an empty list"
   }
 
   assert {

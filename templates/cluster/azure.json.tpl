@@ -2,6 +2,7 @@
     "manifest": {
     "name": "${cluster_name}",
     "type": "cluster",
+    "collaborators": [],
     "cluster_type": "${cluster_type}",
     "environment_names": ["${env_name}"]
     %{ if container_registry_enabled },
